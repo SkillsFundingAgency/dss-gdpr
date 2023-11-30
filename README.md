@@ -1,4 +1,4 @@
-# dss-gdpr
+# dss-gdprupdatecustomerinformation
 
 Function app to anonymise and redact customer information as per the GDPR guidelines
 

@@ -14,11 +14,11 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
         private readonly string _GDPRIdentifyCustomersStoredProcedureName = Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName");
 
         private readonly IAzureSqlDbProvider _azureSqlDbProvider;
-        private readonly ILogger<IdentifyAndAnonymiseDataService> _logger;
+        private readonly ILogger<IIdentifyAndAnonymiseDataService> _logger;
 
         public IdentifyAndAnonymiseDataService(
-            AzureSqlDbProvider azureSqlDbProvider,
-            ILogger<IdentifyAndAnonymiseDataService> logger)
+            IAzureSqlDbProvider azureSqlDbProvider,
+            ILogger<IIdentifyAndAnonymiseDataService> logger)
         {
             _azureSqlDbProvider = azureSqlDbProvider;
             _logger = logger;

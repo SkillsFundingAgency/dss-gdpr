@@ -22,7 +22,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
             _logger = logger;
         }
 
-        public void ExecuteStoredProcedure(string storedProcedureName)
+        public async Task ExecuteStoredProcedureAsync(string storedProcedureName)
         {
             using var conn = new SqlConnection(_sqlConnString);
             using var command = new SqlCommand(storedProcedureName, conn)
@@ -34,8 +34,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
                 _logger.LogInformation($"Attempting to execute the stored procedure: {storedProcedureName}");
                 _logger.LogInformation("Attempting to open a database connection");
 
-                conn.Open();
-                command.ExecuteNonQuery();
+                await conn.OpenAsync();
+                await command.ExecuteNonQueryAsync();
             }
             catch (Exception e)
             {
@@ -45,7 +45,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
             finally
             {
                 _logger.LogInformation("Closing the database connection");
-                conn.Close();
+                await conn.CloseAsync();
             }
         }
 

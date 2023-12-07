@@ -26,12 +26,12 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 
         public async Task AnonymiseData()
         {
-            _azureSqlDbProvider.ExecuteStoredProcedure(_GDPRUpdateCustomersStoredProcedureName);
+            await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRUpdateCustomersStoredProcedureName);
         }
 
         public async Task IdentifyCustomers()
         {
-            _azureSqlDbProvider.ExecuteStoredProcedure(_GDPRIdentifyCustomersStoredProcedureName);
+            await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
         }
     }
 }

@@ -31,7 +31,9 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 
         public async Task IdentifyCustomers()
         {
-            await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
+            var idList = await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
+            
+            //do cosmos changes
         }
     }
 }

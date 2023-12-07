@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
 {
@@ -22,9 +23,9 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
             _logger = logger;
         }
 
-        public async Task ExecuteStoredProcedureAsync(string storedProcedureName)
+        public async Task<List<Guid>> ExecuteStoredProcedureAsync(string storedProcedureName)
         {
-            using var conn = new SqlConnection(_sqlConnString);
+            using SqlConnection conn = new SqlConnection(_sqlConnString);
             using var command = new SqlCommand(storedProcedureName, conn)
             {
                 CommandType = CommandType.StoredProcedure
@@ -35,7 +36,30 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
                 _logger.LogInformation("Attempting to open a database connection");
 
                 await conn.OpenAsync();
-                await command.ExecuteNonQueryAsync();
+                command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                if (storedProcedureName == Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName")) {
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    List<Guid> idList = new List<Guid>();
+                    Guid id;
+
+                    while (reader.Read())
+                    {
+                        id = Guid.Parse(reader["ID"].ToString());
+                        idList.Add(id);
+                    }
+
+                    _logger.LogInformation("finished running the stored proc");
+                    
+                    return idList;
+                }
+                else
+                {
+                    command.ExecuteNonQueryAsync();
+                    return new List<Guid>();
+                }
+
             }
             catch (Exception e)
             {

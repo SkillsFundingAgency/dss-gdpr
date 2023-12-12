@@ -56,7 +56,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
                 }
                 else
                 {
-                    command.ExecuteNonQueryAsync();
+                    await command.ExecuteNonQueryAsync();
                     return new List<Guid>();
                 }
 

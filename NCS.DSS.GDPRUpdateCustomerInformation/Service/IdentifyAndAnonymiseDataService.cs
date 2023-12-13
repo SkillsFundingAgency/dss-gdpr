@@ -17,16 +17,13 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 
         private readonly IAzureSqlDbProvider _azureSqlDbProvider;
         private readonly ILogger<IIdentifyAndAnonymiseDataService> _logger;
-        private readonly IResourceHelper _resourceHelper;
         private readonly IDocumentDBProvider _documentDbProvider;
 
         public IdentifyAndAnonymiseDataService(
-            IResourceHelper resourceHelper,
             IDocumentDBProvider documentDbProvider,
             IAzureSqlDbProvider azureSqlDbProvider,
             ILogger<IIdentifyAndAnonymiseDataService> logger)
         {
-            _resourceHelper = resourceHelper;
             _azureSqlDbProvider = azureSqlDbProvider;
             _documentDbProvider = documentDbProvider;
             _logger = logger;
@@ -37,16 +34,15 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
             await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRUpdateCustomersStoredProcedureName);
         }
 
-        public async Task IdentifyCustomers()
+        public async Task DeleteCustomersfromCosmos()
         {
             var idList = await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
-            var id = idList.First();
-            var doesCustomerExist = await _resourceHelper.DoesCustomerExist(id);
-
-            var customer = await _documentDbProvider.GetCustomerByIdAsync(id);
-
-            _logger.LogInformation("Return of doesCustomerExist: ", doesCustomerExist);
-            //do cosmos changes
+            if (idList != null) {
+                foreach (var id in idList)
+                {
+                    await _documentDbProvider.DeleteRecordsForCustomer(id);
+                }
+            }
         }
     }
 }

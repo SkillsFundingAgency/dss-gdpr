@@ -8,8 +8,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 {
     public interface IDocumentDBProvider
     {
-        Task<bool> DoesCustomerResourceExist(Guid customerId);
+        Task<bool> DoesResourceExist(Guid customerId, string collection, Uri documentUri);
         string GetCustomerJson();
-        Task<Models.Customer> GetCustomerByIdAsync(Guid customerId);
+        Task DeleteRecordsForCustomer(Guid customerId);
     }
 }

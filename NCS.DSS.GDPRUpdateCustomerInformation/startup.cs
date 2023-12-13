@@ -16,7 +16,6 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation
         public override void Configure(IFunctionsHostBuilder builder)
         {
             builder.Services.AddLogging();
-            builder.Services.AddSingleton<IResourceHelper, ResourceHelper>();
             builder.Services.AddSingleton<IJsonHelper, JsonHelper>();
             builder.Services.AddSingleton<IDocumentDBProvider, DocumentDBProvider>();
             builder.Services.AddSingleton<IAzureSqlDbProvider, AzureSqlDbProvider>();

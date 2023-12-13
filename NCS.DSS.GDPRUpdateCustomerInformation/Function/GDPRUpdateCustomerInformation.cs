@@ -22,8 +22,9 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
         public async Task Run([TimerTrigger("0 * * * * *")] TimerInfo myTimer)
         {
             _logger.LogInformation($"C# Timer trigger function executed at: {DateTime.UtcNow}");
+            await _IdentifyAndAnonymiseDataService.AnonymiseData();
 
-            await _IdentifyAndAnonymiseDataService.IdentifyCustomers();
+            await _IdentifyAndAnonymiseDataService.DeleteCustomersfromCosmos();
         }
     }
 }

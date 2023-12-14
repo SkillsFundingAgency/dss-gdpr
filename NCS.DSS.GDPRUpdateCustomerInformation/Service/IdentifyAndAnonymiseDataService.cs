@@ -34,7 +34,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
             await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRUpdateCustomersStoredProcedureName);
         }
 
-        public async Task DeleteCustomersfromCosmos()
+        public async Task DeleteCustomersFromCosmos()
         {
             var idList = await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
             if (idList != null) {
@@ -43,6 +43,12 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
                     await _documentDbProvider.DeleteRecordsForCustomer(id);
                 }
             }
+        }
+
+        //temporary method to return list of customer ids for testing
+        public async Task<List<Guid>> ReturnLisOfCustomerIds()
+        {
+            return await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
         }
     }
 }

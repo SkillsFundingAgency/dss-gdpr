@@ -41,8 +41,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
             log.LogInformation("Successfully redacted customer information from SQL");
 
             log.LogInformation("Attempting to delete related records from CosmosDB");
-            
-            await _IdentifyAndAnonymiseDataService.DeleteCustomersFromCosmos();
+
+            await _IdentifyAndAnonymiseDataService.DeleteCustomersFromCosmos(customerIds);
 
             log.LogInformation("Successfully deleted related records from CosmosDB");
 

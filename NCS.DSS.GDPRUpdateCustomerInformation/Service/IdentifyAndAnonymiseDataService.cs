@@ -34,9 +34,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
             await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRUpdateCustomersStoredProcedureName);
         }
 
-        public async Task DeleteCustomersFromCosmos()
+        public async Task DeleteCustomersFromCosmos(List<Guid> customerIdList)
         {
-            var customerIdList = await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
             if (customerIdList != null) {
                 foreach (var id in customerIdList)
                 {

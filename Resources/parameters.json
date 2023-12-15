@@ -17,7 +17,6 @@
         "sharedAppServicePlanResourceGroup": {
             "value": "__SharedAppServicePlanResourceGroup__"
         },
-
         "azureSQLConnectionString": {
             "value": "__azureSQLConnectionString__"
         },

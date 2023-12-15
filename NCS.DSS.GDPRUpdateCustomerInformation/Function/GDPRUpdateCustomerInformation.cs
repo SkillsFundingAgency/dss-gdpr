@@ -23,14 +23,30 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
         [Singleton]
         public async Task Run(string input, ILogger log)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.UtcNow}");
-            //await _IdentifyAndAnonymiseDataService.AnonymiseData();
+            log.LogInformation($"Function executed at: {DateTime.UtcNow}");
 
-            //await _IdentifyAndAnonymiseDataService.DeleteCustomersFromCosmos();
+            var customerIds = await _IdentifyAndAnonymiseDataService.ReturnCustomerIds();
 
-            var list = await _IdentifyAndAnonymiseDataService.ReturnLisOfCustomerIds();
+            if (customerIds.Count.Equals(0)) {
+                log.LogInformation("No customers fall outside of GDPR compliance");
+                return;
+            }
 
-            log.LogInformation(list.Count.ToString());
+            log.LogInformation(customerIds.Count.ToString(), " customers identified that fall outside of GDPR compliance");
+
+            log.LogInformation("Attempting to redact data from SQL");
+
+            await _IdentifyAndAnonymiseDataService.AnonymiseData();
+
+            log.LogInformation("Successfully redacted customer information from SQL");
+
+            log.LogInformation("Attempting to delete related records from CosmosDB");
+            
+            await _IdentifyAndAnonymiseDataService.DeleteCustomersFromCosmos();
+
+            log.LogInformation("Successfully deleted related records from CosmosDB");
+
+            log.LogInformation("All GPDR function tasks completed successfully");
         }
     }
 }

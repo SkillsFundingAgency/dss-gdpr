@@ -9,7 +9,6 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
     {
         Task AnonymiseData();
         Task DeleteCustomersFromCosmos();
-
-        Task<List<Guid>> ReturnLisOfCustomerIds();
+        Task<List<Guid>> ReturnCustomerIds();
     }
 }

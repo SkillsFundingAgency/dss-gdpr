@@ -77,11 +77,11 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
         private async Task RemoveDocumentsFromCustomer(Guid customerId, DocumentClient client, string collection)
         {
-            var ids = await GetDocumentsFromCustomer(customerId, client, collection);
+            var documentIds = await GetDocumentsFromCustomer(customerId, client, collection);
 
-            if (ids != null)
+            if (documentIds != null)
             {
-                foreach (var documentId in ids)
+                foreach (var documentId in documentIds)
                 {
                     var documentUri = DocumentDBHelper.CreateDocumentUri((Guid)documentId.Id, collection);
                     try

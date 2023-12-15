@@ -32,7 +32,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
                 return;
             }
 
-            log.LogInformation(customerIds.Count.ToString(), " customers identified that fall outside of GDPR compliance");
+            log.LogInformation($"{customerIds.Count} customers identified that fall outside of GDPR compliance");
 
             log.LogInformation("Attempting to redact data from SQL");
 

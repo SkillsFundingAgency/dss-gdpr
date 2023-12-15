@@ -2,37 +2,28 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
-    "cosmosDbCollectionId": {
+    "sharedAppServicePlanName": {
       "type": "string"
     },
-    "cosmosDbDatabaseId": {
+    "sharedAppServicePlanResourceGroup": {
       "type": "string"
     },
-    "customerConnectionString": {
+    "templateBaseUrl": {
+      "type": "string"
+    },
+    "azureSQLConnectionString": {
       "type": "string"
     },
     "environmentName": {
       "type": "string"
     },
+    "cosmosDbEndpoint": {
+      "type": "string"
+    },
+    "cosmosDbKey": {
+      "type": "securestring"
+    },
     "functionAppNames": {
-      "type": "array"
-    },
-    "searchServiceName": {
-      "type": "string"
-    },
-    "searchServiceAdminApiKey": {
-      "type": "string"
-    },
-    "serviceBusConnectionString": {
-      "type": "string"
-    },
-    "serviceBusQueueName": {
-      "type": "string"
-    },
-    "sharedAppServicePlanName": {
-      "type": "string"
-    },
-    "sharedAppServicePlanResourceGroup": {
       "type": "string"
     },
     "storageAccountName": {
@@ -41,9 +32,6 @@
     "storageAccountKey": {
       "type": "string"
     },
-    "templateBaseUrl": {
-      "type": "string"
-    }
   },
     "variables": {
         "functionAppTemplateUri": "[concat(parameters('templateBaseUrl'), '/deployments/function-app-resources.json')]",
@@ -67,29 +55,17 @@
                 "appServicePlanId": {
                   "value": "[variables('sharedAppServicePlanId')]"
                 },
+                "cosmosDbKey": {
+                  "value": "[parameters('cosmosDbKey')]"
+                },
+                "cosmosDbEndpoint": {
+                  "value": "[parameters('cosmosDbEndpoint')]"
+                },
                 "configEnvironmentName": {
                   "value": "[parameters('environmentName')]"
                 },
-                "cosmosDbCollectionId": {
-                  "value": "[parameters('cosmosDbCollectionId')]"
-                },
-                "cosmosDbDatabaseId": {
-                  "value": "[parameters('cosmosDbDatabaseId')]"
-                },
-                "customerConnectionString": {
-                  "value": "[parameters('customerConnectionString')]"
-                },
-                "searchServiceName": {
-                  "value": "[parameters('searchServiceName')]"
-                },
-                "searchServiceAdminApiKey": {
-                  "value": "[parameters('searchServiceAdminApiKey')]"
-                },
-                "serviceBusConnectionString": {
-                  "value": "[parameters('serviceBusConnectionString')]"
-                },
-                "serviceBusQueueName": {
-                  "value": "[parameters('serviceBusQueueName')]"
+                "azureSQLConnectionString": {
+                  "value": "[parameters('azureSQLConnectionString')]"
                 },
                 "storageAccountKey": {
                   "value": "[parameters('storageAccountKey')]"

@@ -21,7 +21,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
         [FunctionName("GDPRUpdateCustomerInformation")]
         [NoAutomaticTrigger]
         [Singleton]
-        public async Task Run(ILogger log)
+        public async Task Run(string input, ILogger log)
         {
             log.LogInformation($"C# Timer trigger function executed at: {DateTime.UtcNow}");
             //await _IdentifyAndAnonymiseDataService.AnonymiseData();

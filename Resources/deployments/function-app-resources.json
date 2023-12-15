@@ -5,31 +5,19 @@
       "appServicePlanId": {
         "type": "string"
       },
+      "azureSQLConnectionString": {
+        "type": "string"
+      },
       "configEnvironmentName": {
         "type": "string"
       },
-      "cosmosDbCollectionId": {
+      "cosmosDbEndpoint": {
         "type": "string"
       },
-      "cosmosDbDatabaseId": {
-        "type": "string"
-      },
-      "customerConnectionString": {
-        "type": "string"
+      "cosmosDbKey": {
+        "type": "securestring"
       },
       "functionAppName": {
-        "type": "string"
-      },
-      "searchServiceName": {
-        "type": "string"
-      },
-      "searchServiceAdminApiKey": {
-        "type": "string"
-      },
-      "serviceBusConnectionString": {
-        "type": "string"
-      },
-      "serviceBusQueueName": {
         "type": "string"
       },
       "storageAccountName": {
@@ -76,57 +64,90 @@
                 "value": "[variables('storageAccountConnectionString')]"
               },
               {
+                "name" : "AzureSQLConnectionString",
+                "value": "[parameters('azureSQLConnectionString')]"
+              },
+              {
                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                 "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName'))).InstrumentationKey]"
               },
               {
-                "name": "CollectionId",
-                "value": "[parameters('cosmosDbCollectionId')]"
+                "name": "CosmosDBConnectionString",
+                "value": "[concat('AccountEndpoint=', parameters('cosmosDbEndpoint'), '/;AccountKey=', parameters('cosmosDbKey'), ';')]"
               },
               {
-                "name": "CustomerConnectionString",
-                "value": "[parameters('customerConnectionString')]"
+                "name": "GDPRIdentifyCustomersStoredProcedureName",
+                "value": "'[dbo].[GDPR_Identify_customers_for_redaction]'"
               },
               {
-                "name": "CustomerSearchIndexName",
-                "value": "customer-search-index-v2"
+                "name": "GDPRUpdateCustomersStoredProcedureName",
+                "value": "'[dbo].[GDPR_Anonymise_customer_information]'"
               },
               {
-                "name": "DatabaseId",
-                "value": "[parameters('cosmosDbDatabaseId')]"
+                "name": "ActionPlansCollectionId",
+                "value": "actionplans"
               },
               {
-                "name": "ServiceBusConnectionString",
-                "value": "[parameters('serviceBusConnectionString')]"
+                "name": "ActionPlansDatabaseId",
+                "value": "actionplans"
               },
               {
-                "name": "QueueName",
-                "value": "[parameters('serviceBusQueueName')]"
+                "name": "ActionsDatabaseId",
+                "value": "actions"
               },
               {
-                "name": "SearchServiceName",
-                "value": "[parameters('searchServiceName')]"
+                "name": "ActionsCollectionId",
+                "value": "actions"
               },
               {
-                "name": "SearchServiceAdminApiKey",
-                "value": "[parameters('searchServiceAdminApiKey')]"
+                "name": "AddressesDatabaseId",
+                "value": "addresses"
               },
               {
-                "name": "SubscriptionCollectionId",
-                "value": "subscriptions"
+                "name": "AddressesCollectionId",
+                "value": "addresses"
               },
               {
-                "name": "SubscriptionDatabaseId",
-                "value": "subscriptions"
+                "name": "ContactsDatabaseId",
+                "value": "contacts"
               },
               {
-                "name": "DigitalIdentityDatabaseId",
-                "value": "digitalidentities"
+                "name": "ContactsCollectionId",
+                "value": "contacts"
               },
               {
-                "name": "DigitalIdentityCollectionId",
-                "value": "digitalidentities"
-              }
+                "name": "CustomersCollectionId",
+                "value": "customers"
+              },
+              {
+                "name": "CustomersDatabaseId",
+                "value": "customers"
+              },
+              {
+                "name": "EmploymentProgressionsCollectionId",
+                "value": "employmentprogressions"
+              },
+              {
+                "name": "EmploymentProgressionsDatabaseId",
+                "value": "employmentprogressions"
+              },
+              {
+                "name": "GoalsDatabaseId",
+                "value": "goals"
+              },
+              {
+                "name": "GoalsCollectionId",
+                "value": "goals"
+              },
+              ,{
+                "name": "WebchatsDatabaseId",
+                "value": "webchats"
+              },
+              {
+                "name": "WebchatsCollectionId",
+                "value": "webchats"
+              },
+
             ]
           }
         }

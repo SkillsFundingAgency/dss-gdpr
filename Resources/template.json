@@ -24,7 +24,7 @@
       "type": "securestring"
     },
     "functionAppNames": {
-      "type": "string"
+      "type": "array"
     },
     "storageAccountName": {
       "type": "string"

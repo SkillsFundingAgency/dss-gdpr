@@ -25,6 +25,12 @@
       },
       "storageAccountKey": {
         "type": "string"
+      },
+      "GDPRUpdateCustomersStoredProcedureName": {
+        "type": "string"
+      },
+      "GDPRIdentifyCustomersStoredProcedureName": {
+        "type": "string"
       }
     },
     "variables": {
@@ -77,11 +83,11 @@
               },
               {
                 "name": "GDPRIdentifyCustomersStoredProcedureName",
-                "value": "'[dbo].[GDPR_Identify_customers_for_redaction]'"
+                "value": "[parameters('GDPRIdentifyCustomersStoredProcedureName')]"
               },
               {
                 "name": "GDPRUpdateCustomersStoredProcedureName",
-                "value": "'[dbo].[GDPR_Anonymise_customer_information]'"
+                "value": "[parameters('GDPRUpdateCustomersStoredProcedureName')]"
               },
               {
                 "name": "ActionPlansCollectionId",

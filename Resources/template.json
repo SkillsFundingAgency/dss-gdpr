@@ -31,7 +31,7 @@
     },
     "storageAccountKey": {
       "type": "string"
-    },
+    }
   },
     "variables": {
         "functionAppTemplateUri": "[concat(parameters('templateBaseUrl'), '/deployments/function-app-resources.json')]",

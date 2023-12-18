@@ -52,26 +52,39 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             if (client == null)
                 return;
 
-            await RemoveDocumentsFromCustomer(customerId, client, "actionplans");
-            await RemoveDocumentsFromCustomer(customerId, client, "actions");
-            await RemoveDocumentsFromCustomer(customerId, client, "addresses");
-            await RemoveDocumentsFromCustomer(customerId, client, "contacts");
-            await RemoveDocumentsFromCustomer(customerId, client, "employmentprogressions");
-            await RemoveDocumentsFromCustomer(customerId, client, "goals");
-            await RemoveDocumentsFromCustomer(customerId, client, "webchats");
+
+            var plansTask = RemoveDocumentsFromCustomer(customerId, client, "actionplans");
+            var actionsTask = RemoveDocumentsFromCustomer(customerId, client, "actions");
+            var addressesTask = RemoveDocumentsFromCustomer(customerId, client, "addresses");
+            var contactsTask = RemoveDocumentsFromCustomer(customerId, client, "contacts");
+            var employmentProgressionsTask = RemoveDocumentsFromCustomer(customerId, client, "employmentprogressions");
+            var goalsTask = RemoveDocumentsFromCustomer(customerId, client, "goals");
+            var webchatsTask = RemoveDocumentsFromCustomer(customerId, client, "webchats");
+            var digitalIdentitiesTask = RemoveDocumentsFromCustomer(customerId, client, "digitalidentities");
+            var diverityDetailsTask = RemoveDocumentsFromCustomer(customerId, client, "diveritydetails");
+            var learningProgressionsTask = RemoveDocumentsFromCustomer(customerId, client, "learningprogressions");
+            var outcomesTask = RemoveDocumentsFromCustomer(customerId, client, "outcomes");
+            var sessionsTask = RemoveDocumentsFromCustomer(customerId, client, "sessions");
+            var subscriptionsTask = RemoveDocumentsFromCustomer(customerId, client, "subscriptions");
+            var transfersTask = RemoveDocumentsFromCustomer(customerId, client, "transfers");
+
+            await Task.WhenAll(plansTask, actionsTask, addressesTask, contactsTask, employmentProgressionsTask, 
+                goalsTask, webchatsTask, digitalIdentitiesTask, diverityDetailsTask, learningProgressionsTask, 
+                outcomesTask, sessionsTask, subscriptionsTask, transfersTask);
 
             var documentUri = DocumentDBHelper.CreateDocumentUri(customerId, "customers");
             if (await DoesResourceExist(customerId, "customers", documentUri))
             {
                 try
                 {
-                    var response = await client.DeleteDocumentAsync(documentUri);
+                    var response = client.DeleteDocumentAsync(documentUri);
                 }
                 catch (DocumentClientException)
                 {
                     return;
                 }
             }
+
             return;
         }
 

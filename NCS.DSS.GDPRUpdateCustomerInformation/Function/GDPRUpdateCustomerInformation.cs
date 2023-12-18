@@ -18,6 +18,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
             _logger = logger;
         }
 
+        //string input only necessary for manual trigger: https://github.com/Azure/azure-functions-vs-build-sdk/issues/168#issuecomment-378913905
         [FunctionName("GDPRUpdateCustomerInformation")]
         [NoAutomaticTrigger]
         [Singleton]

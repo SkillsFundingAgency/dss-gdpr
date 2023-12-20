@@ -37,6 +37,12 @@
     },
     "GDPRIdentifyCustomersStoredProcedureName": {
       "type": "string"
+    },
+    "workspaceName": {
+      "type": "string"
+    },
+    "workspaceResourceGroup": {
+      "type": "string"
     }
   },
     "variables": {
@@ -84,6 +90,9 @@
                 },
                 "GDPRUpdateCustomersStoredProcedureName": {
                   "value": "[parameters('GDPRUpdateCustomersStoredProcedureName')]"
+                },
+                "workspaceId": {
+                  "value": "[resourceId(parameters('workspaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
                 }
               }
             },

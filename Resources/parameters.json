@@ -33,10 +33,16 @@
             "value": "__SharedStorageAccountKey__"
         },
         "GDPRUpdateCustomersStoredProcedureName": {
-          "value": "__GDPRUpdateCustomersStoredProcedureName__"
+            "value": "__GDPRUpdateCustomersStoredProcedureName__"
         },
         "GDPRIdentifyCustomersStoredProcedureName": {
-          "value": "__GDPRIdentifyCustomersStoredProcedureName__"
+            "value": "__GDPRIdentifyCustomersStoredProcedureName__"
+        },
+        "workspaceName": {
+            "value": "__sharedLogAnalyticsWorkspace__"
+        },
+        "workspaceResourceGroup": {
+            "value": "__sharedLogAnalyticsResourceGroup__"
         }
     }
 }

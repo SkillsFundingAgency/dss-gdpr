@@ -61,7 +61,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             var goalsTask = RemoveDocumentsFromCustomer(customerId, client, "goals");
             var webchatsTask = RemoveDocumentsFromCustomer(customerId, client, "webchats");
             var digitalIdentitiesTask = RemoveDocumentsFromCustomer(customerId, client, "digitalidentities");
-            var diverityDetailsTask = RemoveDocumentsFromCustomer(customerId, client, "diveritydetails");
+            var diverityDetailsTask = RemoveDocumentsFromCustomer(customerId, client, "diversitydetails");
             var learningProgressionsTask = RemoveDocumentsFromCustomer(customerId, client, "learningprogressions");
             var outcomesTask = RemoveDocumentsFromCustomer(customerId, client, "outcomes");
             var sessionsTask = RemoveDocumentsFromCustomer(customerId, client, "sessions");

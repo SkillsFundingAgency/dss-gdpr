@@ -2,38 +2,29 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
   "parameters": {
-    "cosmosDbCollectionId": {
-      "type": "string"
-    },
-    "cosmosDbDatabaseId": {
-      "type": "string"
-    },
-    "customerConnectionString": {
-      "type": "string"
-    },
-    "environmentName": {
-      "type": "string"
-    },
-    "functionAppNames": {
-      "type": "array"
-    },
-    "searchServiceName": {
-      "type": "string"
-    },
-    "searchServiceAdminApiKey": {
-      "type": "string"
-    },
-    "serviceBusConnectionString": {
-      "type": "string"
-    },
-    "serviceBusQueueName": {
-      "type": "string"
-    },
     "sharedAppServicePlanName": {
       "type": "string"
     },
     "sharedAppServicePlanResourceGroup": {
       "type": "string"
+    },
+    "templateBaseUrl": {
+      "type": "string"
+    },
+    "azureSQLConnectionString": {
+      "type": "string"
+    },
+    "environmentName": {
+      "type": "string"
+    },
+    "cosmosDbEndpoint": {
+      "type": "string"
+    },
+    "cosmosDbKey": {
+      "type": "securestring"
+    },
+    "functionAppNames": {
+      "type": "array"
     },
     "storageAccountName": {
       "type": "string"
@@ -41,7 +32,16 @@
     "storageAccountKey": {
       "type": "string"
     },
-    "templateBaseUrl": {
+    "GDPRUpdateCustomersStoredProcedureName": {
+      "type": "string"
+    },
+    "GDPRIdentifyCustomersStoredProcedureName": {
+      "type": "string"
+    },
+    "workspaceName": {
+      "type": "string"
+    },
+    "workspaceResourceGroup": {
       "type": "string"
     }
   },
@@ -67,35 +67,32 @@
                 "appServicePlanId": {
                   "value": "[variables('sharedAppServicePlanId')]"
                 },
+                "cosmosDbKey": {
+                  "value": "[parameters('cosmosDbKey')]"
+                },
+                "cosmosDbEndpoint": {
+                  "value": "[parameters('cosmosDbEndpoint')]"
+                },
                 "configEnvironmentName": {
                   "value": "[parameters('environmentName')]"
                 },
-                "cosmosDbCollectionId": {
-                  "value": "[parameters('cosmosDbCollectionId')]"
-                },
-                "cosmosDbDatabaseId": {
-                  "value": "[parameters('cosmosDbDatabaseId')]"
-                },
-                "customerConnectionString": {
-                  "value": "[parameters('customerConnectionString')]"
-                },
-                "searchServiceName": {
-                  "value": "[parameters('searchServiceName')]"
-                },
-                "searchServiceAdminApiKey": {
-                  "value": "[parameters('searchServiceAdminApiKey')]"
-                },
-                "serviceBusConnectionString": {
-                  "value": "[parameters('serviceBusConnectionString')]"
-                },
-                "serviceBusQueueName": {
-                  "value": "[parameters('serviceBusQueueName')]"
+                "azureSQLConnectionString": {
+                  "value": "[parameters('azureSQLConnectionString')]"
                 },
                 "storageAccountKey": {
                   "value": "[parameters('storageAccountKey')]"
                 },
                 "storageAccountName": {
                   "value": "[parameters('storageAccountName')]"
+                },
+                "GDPRIdentifyCustomersStoredProcedureName": {
+                  "value": "[parameters('GDPRIdentifyCustomersStoredProcedureName')]"
+                },
+                "GDPRUpdateCustomersStoredProcedureName": {
+                  "value": "[parameters('GDPRUpdateCustomersStoredProcedureName')]"
+                },
+                "workspaceId": {
+                  "value": "[resourceId(parameters('workspaceResourceGroup'), 'Microsoft.OperationalInsights/workspaces', parameters('workspaceName'))]"
                 }
               }
             },

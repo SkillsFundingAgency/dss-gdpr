@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.Azure.Documents.Client;
-using Microsoft.Extensions.Options;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Helper
 {

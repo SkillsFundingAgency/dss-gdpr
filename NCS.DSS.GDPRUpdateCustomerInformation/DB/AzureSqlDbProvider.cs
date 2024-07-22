@@ -1,13 +1,9 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Service;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
 {
@@ -36,7 +32,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
                 _logger.LogInformation("Attempting to open a database connection");
 
                 await conn.OpenAsync();
-                command.CommandType = System.Data.CommandType.StoredProcedure;
+                command.CommandType = CommandType.StoredProcedure;
 
                 if (storedProcedureName == Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName")) {
                     SqlDataReader reader = command.ExecuteReader();

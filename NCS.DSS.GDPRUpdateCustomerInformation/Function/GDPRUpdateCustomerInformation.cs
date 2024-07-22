@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Service;
 
@@ -10,12 +9,10 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
     public class GDPRUpdateCustomerInformation
     {
         private readonly IIdentifyAndAnonymiseDataService _IdentifyAndAnonymiseDataService;
-        private readonly ILogger<GDPRUpdateCustomerInformation> _logger;
 
-        public GDPRUpdateCustomerInformation(IIdentifyAndAnonymiseDataService IdentifyAndAnonymiseDataService, ILogger<GDPRUpdateCustomerInformation> logger)
+        public GDPRUpdateCustomerInformation(IIdentifyAndAnonymiseDataService IdentifyAndAnonymiseDataService)
         {
             _IdentifyAndAnonymiseDataService = IdentifyAndAnonymiseDataService;
-            _logger = logger;
         }
 
         //string input only necessary for manual trigger: https://github.com/Azure/azure-functions-vs-build-sdk/issues/168#issuecomment-378913905

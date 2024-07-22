@@ -2,10 +2,7 @@
 using NCS.DSS.GDPRUpdateCustomerInformation.DB;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Helper;
 using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Service

@@ -1,4 +1,5 @@
 using FakeItEasy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Service;
 
@@ -9,12 +10,14 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
         private readonly IIdentifyAndAnonymiseDataService _fakeDataService;
         private readonly ILogger<Function.GDPRUpdateCustomerInformation> _fakeLogger;
         private readonly Function.GDPRUpdateCustomerInformation _function;
+        private readonly HttpRequest _request;
 
         public GDPRUpdateCustomerInformationTests()
         {
             _fakeDataService = A.Fake<IIdentifyAndAnonymiseDataService>();
             _fakeLogger = A.Fake<ILogger<Function.GDPRUpdateCustomerInformation>>();
-            _function = new Function.GDPRUpdateCustomerInformation(_fakeDataService);
+            _function = new Function.GDPRUpdateCustomerInformation(_fakeDataService, _fakeLogger);
+            _request = new DefaultHttpContext().Request;
         }
 
         [Fact]
@@ -24,7 +27,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
             A.CallTo(() => _fakeDataService.ReturnCustomerIds()).Returns(Task.FromResult(new List<Guid>()));
 
             // Act
-            await _function.Run(string.Empty, _fakeLogger);
+            await _function.Run(_request);
 
             // Assert
             A.CallTo(() => _fakeDataService.AnonymiseData()).MustNotHaveHappened();
@@ -39,7 +42,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
             A.CallTo(() => _fakeDataService.ReturnCustomerIds()).Returns(Task.FromResult(customerIds));
 
             // Act
-            await _function.Run(string.Empty, _fakeLogger);
+            await _function.Run(_request);
 
             // Assert
             A.CallTo(() => _fakeDataService.AnonymiseData()).MustHaveHappenedOnceExactly();

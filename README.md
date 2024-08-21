@@ -1,7 +1,7 @@
 # DSS GDPR Update Customer Information
 
 > [!NOTE]  
-> The latest version of this API is `v2`
+> The latest version of this API is `v1`
 
 [![Build Status](https://sfa-gov-uk.visualstudio.com/CDS%202.0/_apis/build/status/Yaml/dss-gdprupdatecustomerinformation?repoName=SkillsFundingAgency%2Fdss-gdprupdatecustomerinformation&branchName=master-v2)](https://sfa-gov-uk.visualstudio.com/CDS%202.0/_build/latest?definitionId=3536&repoName=SkillsFundingAgency%2Fdss-gdprupdatecustomerinformation&branchName=master-v2)
 

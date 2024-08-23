@@ -1,4 +1,3 @@
-using System.Linq;
 using DFC.JSON.Standard;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;

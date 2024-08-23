@@ -1,10 +1,8 @@
-using System;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Service;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.AspNetCore.Http;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Azure.Documents.Client;
+﻿using Microsoft.Azure.Documents.Client;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Helper
 {
@@ -149,7 +148,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Helper
                 default:
                     return null;
             }
-            
+
         }
 
         public static Uri CreateDocumentUri(Guid id, string collection)

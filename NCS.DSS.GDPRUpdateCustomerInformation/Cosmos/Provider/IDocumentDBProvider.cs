@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
+﻿namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 {
     public interface IDocumentDBProvider
     {

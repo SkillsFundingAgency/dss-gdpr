@@ -1,9 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Threading.Tasks;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
 {
@@ -34,7 +31,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
                 await conn.OpenAsync();
                 command.CommandType = CommandType.StoredProcedure;
 
-                if (storedProcedureName == Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName")) {
+                if (storedProcedureName == Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName"))
+                {
                     SqlDataReader reader = command.ExecuteReader();
 
                     List<Guid> idList = new List<Guid>();
@@ -47,7 +45,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.DB
                     }
 
                     _logger.LogInformation("finished running the stored proc");
-                    
+
                     return idList;
                 }
                 else

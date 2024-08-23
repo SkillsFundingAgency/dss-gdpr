@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Azure.Documents;
+﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Client;
@@ -58,8 +54,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             var subscriptionsTask = RemoveDocumentsFromCustomer(customerId, client, "subscriptions");
             var transfersTask = RemoveDocumentsFromCustomer(customerId, client, "transfers");
 
-            await Task.WhenAll(plansTask, actionsTask, addressesTask, contactsTask, employmentProgressionsTask, 
-                goalsTask, webchatsTask, digitalIdentitiesTask, diverityDetailsTask, learningProgressionsTask, 
+            await Task.WhenAll(plansTask, actionsTask, addressesTask, contactsTask, employmentProgressionsTask,
+                goalsTask, webchatsTask, digitalIdentitiesTask, diverityDetailsTask, learningProgressionsTask,
                 outcomesTask, sessionsTask, subscriptionsTask, transfersTask);
 
             var documentUri = DocumentDBHelper.CreateDocumentUri(customerId, "customers");

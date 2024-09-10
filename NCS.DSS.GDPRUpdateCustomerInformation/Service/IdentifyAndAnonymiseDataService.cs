@@ -1,12 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.DB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Helper;
 using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider;
+using NCS.DSS.GDPRUpdateCustomerInformation.DB;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 {
@@ -36,7 +30,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 
         public async Task DeleteCustomersFromCosmos(List<Guid> customerIdList)
         {
-            if (customerIdList != null) {
+            if (customerIdList != null)
+            {
                 foreach (var id in customerIdList)
                 {
                     await _documentDbProvider.DeleteRecordsForCustomer(id);

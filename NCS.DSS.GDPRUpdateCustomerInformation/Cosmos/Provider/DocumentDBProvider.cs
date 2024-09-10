@@ -1,27 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Azure.Documents;
+﻿using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
 using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Client;
 using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Helper;
 using NCS.DSS.GDPRUpdateCustomerInformation.Models;
-using Newtonsoft.Json.Linq;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 {
     public class DocumentDBProvider : IDocumentDBProvider
     {
-
-        private string _customerJson;
-
-        public string GetCustomerJson()
-        {
-            return _customerJson;
-        }
 
         public async Task<bool> DoesResourceExist(Guid customerId, string collection, Uri documentUri)
         {
@@ -34,7 +21,6 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 var response = await client.ReadDocumentAsync(documentUri);
                 if (response.Resource != null)
                 {
-                    _customerJson = response.Resource.ToString();
                     return true;
                 }
             }
@@ -68,24 +54,15 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             var subscriptionsTask = RemoveDocumentsFromCustomer(customerId, client, "subscriptions");
             var transfersTask = RemoveDocumentsFromCustomer(customerId, client, "transfers");
 
-            await Task.WhenAll(plansTask, actionsTask, addressesTask, contactsTask, employmentProgressionsTask, 
-                goalsTask, webchatsTask, digitalIdentitiesTask, diverityDetailsTask, learningProgressionsTask, 
+            await Task.WhenAll(plansTask, actionsTask, addressesTask, contactsTask, employmentProgressionsTask,
+                goalsTask, webchatsTask, digitalIdentitiesTask, diverityDetailsTask, learningProgressionsTask,
                 outcomesTask, sessionsTask, subscriptionsTask, transfersTask);
 
             var documentUri = DocumentDBHelper.CreateDocumentUri(customerId, "customers");
             if (await DoesResourceExist(customerId, "customers", documentUri))
             {
-                try
-                {
-                    var response = client.DeleteDocumentAsync(documentUri);
-                }
-                catch (DocumentClientException)
-                {
-                    return;
-                }
+                await client.DeleteDocumentAsync(documentUri);
             }
-
-            return;
         }
 
         private async Task RemoveDocumentsFromCustomer(Guid customerId, DocumentClient client, string collection)
@@ -99,7 +76,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                     var documentUri = DocumentDBHelper.CreateDocumentUri((Guid)documentId.Id, collection);
                     try
                     {
-                        var response = await client.DeleteDocumentAsync(documentUri);
+                        await client.DeleteDocumentAsync(documentUri);
                     }
                     catch (DocumentClientException)
                     {

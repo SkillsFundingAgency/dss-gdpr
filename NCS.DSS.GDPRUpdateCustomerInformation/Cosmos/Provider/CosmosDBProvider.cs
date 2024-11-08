@@ -1,5 +1,4 @@
-﻿using Azure.Search.Documents.Indexes;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Models;
 
@@ -67,8 +66,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
             var parameterizedQuery = new QueryDefinition(
-                query: "SELECT VALUE { Id: c.id, CustomerId: c.CustomerId } FROM c WHERE c.CustomerId = '@customerId'"
-            ).WithParameter("@customerId", customerId.ToString());
+                query: "SELECT c.id, c.CustomerId FROM c WHERE c.CustomerId = '@customerId'"
+            ).WithParameter("@customerId", customerId);
 
             using FeedIterator<DocumentId> filteredFeed = cosmosDbContainer.GetItemQueryIterator<DocumentId>(
                  queryDefinition: parameterizedQuery
@@ -83,7 +82,12 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             while (filteredFeed.HasMoreResults)
             {
                 FeedResponse<DocumentId> response = await filteredFeed.ReadNextAsync();
-                documents.AddRange(response);
+
+                foreach (var item in response)
+                {
+                    _logger.LogInformation($"ITEM ID: {item.Id} | ITEM CUST ID: {item.CustomerId}");
+                    documents.Add(item);
+                }
             }
 
             if (documents.Count > 0)

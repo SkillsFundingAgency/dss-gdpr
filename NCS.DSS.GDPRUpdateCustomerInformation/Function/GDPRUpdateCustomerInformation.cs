@@ -18,7 +18,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
         }
 
         [Function(nameof(GDPRUpdateCustomerInformation))]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
+        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
         {
             _logger.LogInformation($"{nameof(GDPRUpdateCustomerInformation)} has been invoked");
             _logger.LogInformation("Attempting to retrieve list of customer IDs");

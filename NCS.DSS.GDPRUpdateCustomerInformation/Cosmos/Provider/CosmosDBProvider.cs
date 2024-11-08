@@ -8,6 +8,22 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
     {
         private readonly CosmosClient _cosmosDbClient;
 
+        private const string ActionPlansCosmosDb = "actionplans";
+        private const string ActionsCosmosDb = "actions";
+        private const string AddressCosmosDb = "addresses";
+        private const string ContactCosmosDb = "contacts";
+        private const string CustomerCosmosDb = "customers";
+        private const string DigitalIdentityCosmosDb = "digitalidentities";
+        private const string DiversityDetailsCosmosDb = "diversitydetails";
+        private const string EmploymentProgressionCosmosDb = "employmentprogressions";
+        private const string GoalsCosmosDb = "goals";
+        private const string LearningProgressionCosmosDb = "learningprogressions";
+        private const string OutcomesCosmosDb = "outcomes";
+        private const string SessionCosmosDb = "sessions";
+        private const string SubscriptionsCosmosDb = "subscriptions";
+        private const string TransferCosmosDb = "transfers";
+        private const string WebchatsCosmosDb = "webchats";
+
         public CosmosDBProvider(CosmosClient cosmosClient)
         {
             _cosmosDbClient = cosmosClient;
@@ -15,26 +31,26 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
         public async Task DeleteRecordsForCustomer(Guid customerId)
         {
-            var actionPlansTask = DeleteDocumentFromContainer(customerId, "actionplans", "actionplans");
-            var actionsTask = DeleteDocumentFromContainer(customerId, "actions", "actions");
-            var addressesTask = DeleteDocumentFromContainer(customerId, "addresses", "addresses");
-            var contactsTask = DeleteDocumentFromContainer(customerId, "contacts", "contacts");
-            var employmentProgressionTask = DeleteDocumentFromContainer(customerId, "employmentprogressions", "employmentprogressions");
-            var goalsTask = DeleteDocumentFromContainer(customerId, "goals", "goals");
-            var webchatsTask = DeleteDocumentFromContainer(customerId, "webchats", "webchats");
-            var digitalIdentityTask = DeleteDocumentFromContainer(customerId, "digitalidentities", "digitalidentities");
-            var diverityDetailsTask = DeleteDocumentFromContainer(customerId, "diversitydetails", "diversitydetails");
-            var learningProgressionsTask = DeleteDocumentFromContainer(customerId, "learningprogressions", "learningprogressions");
-            var outcomesTask = DeleteDocumentFromContainer(customerId, "outcomes", "outcomes");
-            var sessionsTask = DeleteDocumentFromContainer(customerId, "sessions", "sessions");
-            var subscriptionsTask = DeleteDocumentFromContainer(customerId, "subscriptions", "subscriptions");
-            var transfersTask = DeleteDocumentFromContainer(customerId, "transfers", "transfers");
+            var actionPlansTask = DeleteDocumentFromContainer(customerId, ActionPlansCosmosDb, ActionPlansCosmosDb);
+            var actionsTask = DeleteDocumentFromContainer(customerId, ActionsCosmosDb, ActionsCosmosDb);
+            var addressesTask = DeleteDocumentFromContainer(customerId, AddressCosmosDb, AddressCosmosDb);
+            var contactsTask = DeleteDocumentFromContainer(customerId, ContactCosmosDb, ContactCosmosDb);
+            var employmentProgressionTask = DeleteDocumentFromContainer(customerId, EmploymentProgressionCosmosDb, EmploymentProgressionCosmosDb);
+            var goalsTask = DeleteDocumentFromContainer(customerId, GoalsCosmosDb, GoalsCosmosDb);
+            var webchatsTask = DeleteDocumentFromContainer(customerId, WebchatsCosmosDb, WebchatsCosmosDb);
+            var digitalIdentityTask = DeleteDocumentFromContainer(customerId, DigitalIdentityCosmosDb, DigitalIdentityCosmosDb);
+            var diverityDetailsTask = DeleteDocumentFromContainer(customerId, DiversityDetailsCosmosDb, DiversityDetailsCosmosDb);
+            var learningProgressionsTask = DeleteDocumentFromContainer(customerId, LearningProgressionCosmosDb, LearningProgressionCosmosDb);
+            var outcomesTask = DeleteDocumentFromContainer(customerId, OutcomesCosmosDb, OutcomesCosmosDb);
+            var sessionsTask = DeleteDocumentFromContainer(customerId, SessionCosmosDb, SessionCosmosDb);
+            var subscriptionsTask = DeleteDocumentFromContainer(customerId, SubscriptionsCosmosDb, SubscriptionsCosmosDb);
+            var transfersTask = DeleteDocumentFromContainer(customerId, TransferCosmosDb, TransferCosmosDb);
 
             await Task.WhenAll(actionPlansTask, actionsTask, addressesTask, contactsTask, employmentProgressionTask,
                 goalsTask, webchatsTask, digitalIdentityTask, diverityDetailsTask, learningProgressionsTask,
                 outcomesTask, sessionsTask, subscriptionsTask, transfersTask);
 
-            await DeleteDocumentFromContainer(customerId, "customers", "customers"); // do we need to check if this exists first?
+            await DeleteDocumentFromContainer(customerId, CustomerCosmosDb, CustomerCosmosDb); // do we need to check if this exists first?
         }
 
         private async Task DeleteDocumentFromContainer(Guid customerId, string databaseName, string containerName)

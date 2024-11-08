@@ -92,7 +92,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
                     {
                         if (!deleteRequestResponse.IsSuccessStatusCode)
                         {
-                            _logger.LogWarning($"Failed to delete document. Document ID: {documentId}");
+                            _logger.LogWarning($"Failed to delete Document ({documentId}). Response code: {deleteRequestResponse.StatusCode.ToString()}. Error: {deleteRequestResponse.ErrorMessage}");
                         }
                         else
                         {

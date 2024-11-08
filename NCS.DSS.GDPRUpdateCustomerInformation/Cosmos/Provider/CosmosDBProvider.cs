@@ -67,8 +67,8 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
             var parameterizedQuery = new QueryDefinition(
-                query: "SELECT VALUE { Id: c.id, CustomerId: c.CustomerId } FROM @container c WHERE c.CustomerId = '@customerId'"
-            ).WithParameter("@container", containerName).WithParameter("@customerId", customerId.ToString());
+                query: "SELECT VALUE { Id: c.id, CustomerId: c.CustomerId } FROM c WHERE c.CustomerId = '@customerId'"
+            ).WithParameter("@customerId", customerId.ToString());
 
             using FeedIterator<DocumentId> filteredFeed = cosmosDbContainer.GetItemQueryIterator<DocumentId>(
                  queryDefinition: parameterizedQuery

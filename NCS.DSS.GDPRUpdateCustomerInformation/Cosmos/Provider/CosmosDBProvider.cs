@@ -65,9 +65,22 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
+            FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(
+                new QueryDefinition("SELECT * FROM c WHERE c.CustomerId = @customerId").WithParameter("@customerId", customerId));
+
+            while (resultSet.HasMoreResults)
+            {
+                FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
+                foreach (var item in response)
+                {
+                    _logger.LogInformation($"ITEM: {item}");
+                }
+            }
+
+            /*
             var parameterizedQuery = new QueryDefinition(
-                query: "SELECT c.id, c.CustomerId FROM c WHERE c.CustomerId = '@customerId'"
-            ).WithParameter("@customerId", customerId);
+                query: 
+            ).WithParameter();
 
             using FeedIterator<DocumentId> filteredFeed = cosmosDbContainer.GetItemQueryIterator<DocumentId>(
                  queryDefinition: parameterizedQuery
@@ -115,6 +128,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             {
                 _logger.LogWarning($"No documents of type '{containerName}' were found for customer '{customerId.ToString()}'");
             }
+            */
         }
     }
 }

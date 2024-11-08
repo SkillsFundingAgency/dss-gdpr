@@ -71,64 +71,34 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
             FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(queryDefinition);
 
+            List<string> documentIds = new List<string>();
+
             while (resultSet.HasMoreResults)
             {
                 FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
                 foreach (var item in response)
                 {
-                    //DocumentId dynamicDocument = new DocumentId {
-                    //    Id = new Guid(),
-                    //    CustomerId = new Guid()
-                    //};
-                    
+                    documentIds.Add(item.id);
                     _logger.LogInformation($"ITEM: {item}");
-                    _logger.LogInformation($"ITEM ID (directly): {item.id}");
-                    _logger.LogInformation($"ITEM ID (via code): {item.GetType().GetProperty("id").GetValue(item, "")}");
                 }
             }
 
-            /*
-            var parameterizedQuery = new QueryDefinition(
-                query: 
-            ).WithParameter();
-
-            using FeedIterator<DocumentId> filteredFeed = cosmosDbContainer.GetItemQueryIterator<DocumentId>(
-                 queryDefinition: parameterizedQuery
-            );
-
-            //var query = cosmosDbContainer.GetItemLinqQueryable<DocumentId>()
-            //    .Where(x => x.CustomerId == customerId)
-            //    .ToFeedIterator();
-
-            List<DocumentId> documents = new List<DocumentId>();
-
-            while (filteredFeed.HasMoreResults)
+            if (documentIds.Count > 0)
             {
-                FeedResponse<DocumentId> response = await filteredFeed.ReadNextAsync();
-
-                foreach (var item in response)
-                {
-                    _logger.LogInformation($"ITEM ID: {item.Id} | ITEM CUST ID: {item.CustomerId}");
-                    documents.Add(item);
-                }
-            }
-
-            if (documents.Count > 0)
-            {
-                _logger.LogInformation($"A total of {documents.Count.ToString()} '{containerName}' documents have been identified");
+                _logger.LogInformation($"A total of {documentIds.Count.ToString()} '{containerName}' documents have been identified");
                 int totalDeleted = 0;
 
-                foreach (var document in documents)
+                foreach (var id in documentIds)
                 {
                     try
                     {
+                        _logger.LogInformation($"** TYPE: {containerName} | ID: {id}");
                         //await cosmosDbContainer.DeleteItemAsync<DocumentId>(document.Id.ToString(), new PartitionKey());
                         totalDeleted++;
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogWarning($"Failed to delete document. Document ID: {document.Id.ToString()}. Error: {ex.Message}");
-                        // should this throw an exception?
+                        _logger.LogWarning($"Failed to delete document. Document ID: {id}. Error: {ex.Message}");
                     }
                 }
 
@@ -138,7 +108,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
             {
                 _logger.LogWarning($"No documents of type '{containerName}' were found for customer '{customerId.ToString()}'");
             }
-            */
+            
         }
     }
 }

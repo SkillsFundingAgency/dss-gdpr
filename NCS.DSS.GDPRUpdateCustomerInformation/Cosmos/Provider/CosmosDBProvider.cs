@@ -78,37 +78,39 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
                 foreach (var item in response)
                 {
-                    documentIds.Add(item.id);
                     _logger.LogInformation($"ITEM: {item}");
+                    _logger.LogInformation($"ITEM ID: {item.id}");
+                    _logger.LogInformation($"ITEM ID (str): {Convert.ToString(item.id)}");
+                    documentIds.Add(Convert.ToString(item.id)); 
                 }
             }
 
-            if (documentIds.Count > 0)
+            /*if (documentIds.Count > 0)
             {
                 _logger.LogInformation($"A total of {documentIds.Count.ToString()} '{containerName}' documents have been identified");
                 int totalDeleted = 0;
 
                 foreach (var id in documentIds)
                 {
-                    try
+                    using (ResponseMessage response = await cosmosDbContainer.DeleteItemStreamAsync(id, new PartitionKey()))
                     {
-                        _logger.LogInformation($"** TYPE: {containerName} | ID: {id}");
-                        //await cosmosDbContainer.DeleteItemAsync<DocumentId>(document.Id.ToString(), new PartitionKey());
-                        totalDeleted++;
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning($"Failed to delete document. Document ID: {id}. Error: {ex.Message}");
+                        if (!response.IsSuccessStatusCode)
+                        {
+                            _logger.LogWarning($"Failed to delete document. Document ID: {id}");
+                        } 
+                        else
+                        {
+                            totalDeleted++;
+                        }
                     }
                 }
 
-                _logger.LogInformation($"A total of {totalDeleted} '{containerName}' documents have been deleted");
+                _logger.LogInformation($"{totalDeleted}/{documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
             }
             else
             {
                 _logger.LogWarning($"No documents of type '{containerName}' were found for customer '{customerId.ToString()}'");
-            }
-            
+            }*/
         }
     }
 }

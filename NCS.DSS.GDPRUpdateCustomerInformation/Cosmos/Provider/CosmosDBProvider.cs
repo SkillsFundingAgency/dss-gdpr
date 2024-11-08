@@ -65,15 +65,25 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(
-                new QueryDefinition("SELECT * FROM c WHERE c.CustomerId = @customerId").WithParameter("@customerId", customerId));
+            QueryDefinition queryDefinition = (containerName == CustomerCosmosDb) ?
+                new QueryDefinition("SELECT * FROM c WHERE c.id = @customerId").WithParameter("@customerId", customerId)
+                : new QueryDefinition("SELECT * FROM c WHERE c.CustomerId = @customerId").WithParameter("@customerId", customerId);
+
+            FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(queryDefinition);
 
             while (resultSet.HasMoreResults)
             {
                 FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
                 foreach (var item in response)
                 {
+                    //DocumentId dynamicDocument = new DocumentId {
+                    //    Id = new Guid(),
+                    //    CustomerId = new Guid()
+                    //};
+                    
                     _logger.LogInformation($"ITEM: {item}");
+                    _logger.LogInformation($"ITEM ID (directly): {item.id}");
+                    _logger.LogInformation($"ITEM ID (via code): {item.GetType().GetProperty("id").GetValue(item, "")}");
                 }
             }
 

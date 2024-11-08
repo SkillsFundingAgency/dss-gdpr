@@ -15,7 +15,7 @@ var host = new HostBuilder()
         services.ConfigureFunctionsApplicationInsights();
         services.AddLogging();
         services.AddSingleton<IJsonHelper, JsonHelper>();
-        services.AddSingleton<IDocumentDBProvider, DocumentDBProvider>();
+        services.AddSingleton<ICosmosDBProvider, CosmosDBProvider>();
         services.AddSingleton<IAzureSqlDbProvider, AzureSqlDbProvider>();
         services.AddSingleton<IIdentifyAndAnonymiseDataService, IdentifyAndAnonymiseDataService>();
     })

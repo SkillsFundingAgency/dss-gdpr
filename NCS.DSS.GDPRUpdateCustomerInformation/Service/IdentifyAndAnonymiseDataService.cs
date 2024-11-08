@@ -11,15 +11,15 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 
         private readonly IAzureSqlDbProvider _azureSqlDbProvider;
         private readonly ILogger<IIdentifyAndAnonymiseDataService> _logger;
-        private readonly IDocumentDBProvider _documentDbProvider;
+        private readonly ICosmosDBProvider _cosmosDbProvider;
 
         public IdentifyAndAnonymiseDataService(
-            IDocumentDBProvider documentDbProvider,
+            ICosmosDBProvider cosmosDbProvider,
             IAzureSqlDbProvider azureSqlDbProvider,
             ILogger<IIdentifyAndAnonymiseDataService> logger)
         {
             _azureSqlDbProvider = azureSqlDbProvider;
-            _documentDbProvider = documentDbProvider;
+            _cosmosDbProvider = cosmosDbProvider;
             _logger = logger;
         }
 
@@ -34,7 +34,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
             {
                 foreach (var id in customerIdList)
                 {
-                    await _documentDbProvider.DeleteRecordsForCustomer(id);
+                    await _cosmosDbProvider.DeleteRecordsForCustomer(id);
                 }
             }
         }

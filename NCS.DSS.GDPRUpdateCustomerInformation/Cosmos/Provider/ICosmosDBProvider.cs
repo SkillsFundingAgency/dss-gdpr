@@ -1,8 +1,7 @@
 ﻿namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 {
-    public interface IDocumentDBProvider
+    public interface ICosmosDBProvider
     {
-        Task<bool> DoesResourceExist(Guid customerId, string collection, Uri documentUri);
         Task DeleteRecordsForCustomer(Guid customerId);
     }
 }

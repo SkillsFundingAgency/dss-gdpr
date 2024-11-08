@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Linq;
+using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Models;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
@@ -7,6 +8,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
     public class CosmosDBProvider : ICosmosDBProvider
     {
         private readonly CosmosClient _cosmosDbClient;
+        private readonly ILogger<CosmosDBProvider> _logger;
 
         private const string ActionPlansCosmosDb = "actionplans";
         private const string ActionsCosmosDb = "actions";
@@ -24,13 +26,16 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
         private const string TransferCosmosDb = "transfers";
         private const string WebchatsCosmosDb = "webchats";
 
-        public CosmosDBProvider(CosmosClient cosmosClient)
+        public CosmosDBProvider(CosmosClient cosmosClient, ILogger<CosmosDBProvider> logger)
         {
             _cosmosDbClient = cosmosClient;
+            _logger = logger;
         }
 
         public async Task DeleteRecordsForCustomer(Guid customerId)
         {
+            _logger.LogInformation($"{nameof(DeleteRecordsForCustomer)} function has been invoked");
+
             var actionPlansTask = DeleteDocumentFromContainer(customerId, ActionPlansCosmosDb, ActionPlansCosmosDb);
             var actionsTask = DeleteDocumentFromContainer(customerId, ActionsCosmosDb, ActionsCosmosDb);
             var addressesTask = DeleteDocumentFromContainer(customerId, AddressCosmosDb, AddressCosmosDb);
@@ -51,10 +56,14 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 outcomesTask, sessionsTask, subscriptionsTask, transfersTask);
 
             await DeleteDocumentFromContainer(customerId, CustomerCosmosDb, CustomerCosmosDb); // do we need to check if this exists first?
+
+            _logger.LogInformation($"{nameof(DeleteRecordsForCustomer)} function has finished invocation");
         }
 
         private async Task DeleteDocumentFromContainer(Guid customerId, string databaseName, string containerName)
         {
+            _logger.LogInformation($"Attempting to retrieve documents associated with customer '{customerId.ToString()}' from container '{containerName}' from within database '{databaseName}'");
+
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
             var query = cosmosDbContainer.GetItemLinqQueryable<DocumentId>()
@@ -71,10 +80,24 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
             if (documents != null && documents.Count > 0)
             {
+                _logger.LogInformation($"A total of {documents.Count.ToString()} '{containerName}' documents have been identified");
+                int totalDeleted = 0;
+
                 foreach (var document in documents)
                 {
-                    await cosmosDbContainer.DeleteItemAsync<DocumentId>(document.Id.ToString(), new PartitionKey());
+                    try
+                    {
+                        await cosmosDbContainer.DeleteItemAsync<DocumentId>(document.Id.ToString(), new PartitionKey());
+                        totalDeleted++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Failed to delete document. Document ID: {document.Id.ToString()}. Error: {ex.Message}");
+                        // should this throw an exception?
+                    }
                 }
+
+                _logger.LogInformation($"A total of {totalDeleted} '{containerName}' documents have been deleted");
             }
         }
     }

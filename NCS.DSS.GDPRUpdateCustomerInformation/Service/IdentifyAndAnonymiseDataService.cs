@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider;
-using NCS.DSS.GDPRUpdateCustomerInformation.DB;
+using System.Data;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
 {
@@ -8,41 +9,109 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
     {
         private readonly string _GDPRUpdateCustomersStoredProcedureName = Environment.GetEnvironmentVariable("GDPRUpdateCustomersStoredProcedureName");
         private readonly string _GDPRIdentifyCustomersStoredProcedureName = Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName");
+        private readonly string _sqlConnectionString = Environment.GetEnvironmentVariable("AzureSQLConnectionString");
 
-        private readonly IAzureSqlDbProvider _azureSqlDbProvider;
         private readonly ILogger<IIdentifyAndAnonymiseDataService> _logger;
         private readonly ICosmosDBProvider _cosmosDbProvider;
+        private readonly SqlConnection _sqlConnection;
 
-        public IdentifyAndAnonymiseDataService(
-            ICosmosDBProvider cosmosDbProvider,
-            IAzureSqlDbProvider azureSqlDbProvider,
-            ILogger<IIdentifyAndAnonymiseDataService> logger)
+        public IdentifyAndAnonymiseDataService(ICosmosDBProvider cosmosDbProvider, ILogger<IIdentifyAndAnonymiseDataService> logger)
         {
-            _azureSqlDbProvider = azureSqlDbProvider;
             _cosmosDbProvider = cosmosDbProvider;
             _logger = logger;
+            _sqlConnection = new SqlConnection(_sqlConnectionString);
         }
 
         public async Task AnonymiseData()
         {
-            await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRUpdateCustomersStoredProcedureName);
+            await ExecuteUpdateStoredProcedureAsync();
         }
 
-        public async Task DeleteCustomersFromCosmos(List<Guid> customerIdList)
+        public async Task DeleteCustomersFromCosmos(List<Guid> CustomerIds)
         {
-            if (customerIdList != null)
+            if (CustomerIds != null)
             {
-                foreach (var id in customerIdList)
+                foreach (Guid customerId in CustomerIds)
                 {
-                    await _cosmosDbProvider.DeleteRecordsForCustomer(id);
+                    await _cosmosDbProvider.DeleteRecordsForCustomer(customerId);
                 }
             }
         }
 
-        //temporary method to return list of customer ids for testing
         public async Task<List<Guid>> ReturnCustomerIds()
         {
-            return await _azureSqlDbProvider.ExecuteStoredProcedureAsync(_GDPRIdentifyCustomersStoredProcedureName);
+            return await ExecuteIdentifyStoredProcedureAsync();
+        }
+
+        private async Task<List<Guid>> ExecuteIdentifyStoredProcedureAsync()
+        {
+            using var command = new SqlCommand(_GDPRIdentifyCustomersStoredProcedureName, _sqlConnection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            _logger.LogInformation($"Attempting to execute the stored procedure: {_GDPRIdentifyCustomersStoredProcedureName}");
+            _logger.LogInformation("Opening a database connection...");
+
+            try
+            {
+                await _sqlConnection.OpenAsync();
+                command.CommandType = CommandType.StoredProcedure;
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                List<Guid> idList = new List<Guid>();
+                Guid id;
+
+                while (reader.Read())
+                {
+                    id = Guid.Parse(reader["ID"].ToString());
+                    idList.Add(id);
+                }
+
+                _logger.LogInformation($"Finished executing the stored procedure: {_GDPRIdentifyCustomersStoredProcedureName}");
+
+                return idList;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to execute the stored procedure ({_GDPRIdentifyCustomersStoredProcedureName}). Error: {e}");
+                throw;
+            }
+            finally
+            {
+                _logger.LogInformation("Closing a database connection...");
+                await _sqlConnection.CloseAsync();
+            }
+        }
+
+        private async Task ExecuteUpdateStoredProcedureAsync()
+        {
+            using var command = new SqlCommand(_GDPRUpdateCustomersStoredProcedureName, _sqlConnection)
+            {
+                CommandType = CommandType.StoredProcedure
+            };
+
+            _logger.LogInformation($"Attempting to execute the stored procedure: {_GDPRUpdateCustomersStoredProcedureName}");
+            _logger.LogInformation("Opening a database connection...");
+
+            try
+            {
+                await _sqlConnection.OpenAsync();
+                command.CommandType = CommandType.StoredProcedure;
+
+                await command.ExecuteNonQueryAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to execute the stored procedure ({_GDPRUpdateCustomersStoredProcedureName}). Error: {e}");
+                throw;
+            }
+            finally
+            {
+                _logger.LogInformation("Closing a database connection...");
+                await _sqlConnection.CloseAsync();
+            }
         }
     }
 }

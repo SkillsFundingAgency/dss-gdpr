@@ -85,14 +85,16 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 }
             }
 
-            /*if (documentIds.Count > 0)
+            if (documentIds.Count > 0)
             {
                 _logger.LogInformation($"A total of {documentIds.Count.ToString()} '{containerName}' documents have been identified");
                 int totalDeleted = 0;
 
                 foreach (var id in documentIds)
                 {
-                    using (ResponseMessage response = await cosmosDbContainer.DeleteItemStreamAsync(id, new PartitionKey()))
+                    _logger.LogInformation($"ITEM ID: {id} | ITEM Type: {containerName}");
+
+                    /*using (ResponseMessage response = await cosmosDbContainer.DeleteItemStreamAsync(id, new PartitionKey()))
                     {
                         if (!response.IsSuccessStatusCode)
                         {
@@ -102,15 +104,15 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                         {
                             totalDeleted++;
                         }
-                    }
+                    }*/
                 }
 
-                _logger.LogInformation($"{totalDeleted}/{documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
+                //_logger.LogInformation($"{totalDeleted}/{documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
             }
             else
             {
                 _logger.LogWarning($"No documents of type '{containerName}' were found for customer '{customerId.ToString()}'");
-            }*/
+            }
         }
     }
 }

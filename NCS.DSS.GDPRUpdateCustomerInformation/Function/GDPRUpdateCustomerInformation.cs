@@ -26,7 +26,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
             try
             {
                 //List<Guid> customerIds = await _identifyAndAnonymiseDataService.ReturnCustomerIds();
-                List<Guid> customerIds = new List<Guid> { 
+                List<Guid> customerIds = new List<Guid> {
                     new Guid("e471a9d3-21f8-4ee9-bc83-000013def0a0"),
                     new Guid("8e49ac18-0fa4-4e15-a23a-00001d8435bb"),
                 };

@@ -1,4 +1,4 @@
-﻿namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
+﻿namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
 {
     public interface IIdentifyAndAnonymiseDataService
     {

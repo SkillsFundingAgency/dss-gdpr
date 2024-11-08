@@ -1,9 +1,8 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider;
 using System.Data;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
+namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
 {
     public class IdentifyAndAnonymiseDataService : IIdentifyAndAnonymiseDataService
     {
@@ -12,12 +11,12 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
         private readonly string _sqlConnectionString = Environment.GetEnvironmentVariable("AzureSQLConnectionString");
 
         private readonly ILogger<IIdentifyAndAnonymiseDataService> _logger;
-        private readonly ICosmosDBProvider _cosmosDbProvider;
+        private readonly ICosmosDBService _cosmosDBService;
         private readonly SqlConnection _sqlConnection;
 
-        public IdentifyAndAnonymiseDataService(ICosmosDBProvider cosmosDbProvider, ILogger<IIdentifyAndAnonymiseDataService> logger)
+        public IdentifyAndAnonymiseDataService(ICosmosDBService cosmosDBService, ILogger<IIdentifyAndAnonymiseDataService> logger)
         {
-            _cosmosDbProvider = cosmosDbProvider;
+            _cosmosDBService = cosmosDBService;
             _logger = logger;
             _sqlConnection = new SqlConnection(_sqlConnectionString);
         }
@@ -33,7 +32,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Service
             {
                 foreach (Guid customerId in CustomerIds)
                 {
-                    await _cosmosDbProvider.DeleteRecordsForCustomer(customerId);
+                    await _cosmosDBService.DeleteRecordsForCustomer(customerId);
                 }
             }
         }

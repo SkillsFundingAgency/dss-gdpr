@@ -3,8 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider;
-using NCS.DSS.GDPRUpdateCustomerInformation.Service;
+using NCS.DSS.GDPRUpdateCustomerInformation.Services;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation
 {
@@ -17,7 +16,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation
                 services.AddApplicationInsightsTelemetryWorkerService();
                 services.ConfigureFunctionsApplicationInsights();
 
-                services.AddSingleton<ICosmosDBProvider, CosmosDBProvider>();
+                services.AddSingleton<ICosmosDBService, CosmosDBService>();
                 services.AddSingleton<IIdentifyAndAnonymiseDataService, IdentifyAndAnonymiseDataService>();
 
                 services.AddSingleton(s =>

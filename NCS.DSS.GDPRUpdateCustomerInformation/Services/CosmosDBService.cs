@@ -1,12 +1,12 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
+namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
 {
-    public class CosmosDBProvider : ICosmosDBProvider
+    public class CosmosDBService : ICosmosDBService
     {
         private readonly CosmosClient _cosmosDbClient;
-        private readonly ILogger<CosmosDBProvider> _logger;
+        private readonly ILogger<CosmosDBService> _logger;
 
         private const string ActionPlansCosmosDb = "actionplans";
         private const string ActionsCosmosDb = "actions";
@@ -24,7 +24,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
         private const string TransferCosmosDb = "transfers";
         private const string WebchatsCosmosDb = "webchats";
 
-        public CosmosDBProvider(CosmosClient cosmosClient, ILogger<CosmosDBProvider> logger)
+        public CosmosDBService(CosmosClient cosmosClient, ILogger<CosmosDBService> logger)
         {
             _cosmosDbClient = cosmosClient;
             _logger = logger;
@@ -64,7 +64,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            QueryDefinition queryDefinition = (containerName == CustomerCosmosDb) ?
+            QueryDefinition queryDefinition = containerName == CustomerCosmosDb ?
                 new QueryDefinition("SELECT * FROM c WHERE c.id = @customerId").WithParameter("@customerId", customerId)
                 : new QueryDefinition("SELECT * FROM c WHERE c.CustomerId = @customerId").WithParameter("@customerId", customerId);
 
@@ -77,7 +77,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
                 foreach (var item in response)
                 {
-                    documentIds.Add(Convert.ToString(item.id)); 
+                    documentIds.Add(Convert.ToString(item.id));
                 }
             }
 
@@ -93,7 +93,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                         if (!response.IsSuccessStatusCode)
                         {
                             _logger.LogWarning($"Failed to delete document. Document ID: {id}");
-                        } 
+                        }
                         else
                         {
                             totalDeleted++;

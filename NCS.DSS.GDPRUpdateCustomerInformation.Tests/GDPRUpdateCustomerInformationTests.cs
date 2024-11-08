@@ -1,7 +1,7 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Service;
+using NCS.DSS.GDPRUpdateCustomerInformation.Services;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
 {

@@ -32,7 +32,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation
                     // Log levels can also be configured using appsettings.json. For more information, see https://learn.microsoft.com/en-us/azure/azure-monitor/app/worker-service#ilogger-logs
                     LoggerFilterRule toRemove = options.Rules.FirstOrDefault(rule => rule.ProviderName
                         == "Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider");
-                    
+
                     if (toRemove is not null)
                     {
                         options.Rules.Remove(toRemove);

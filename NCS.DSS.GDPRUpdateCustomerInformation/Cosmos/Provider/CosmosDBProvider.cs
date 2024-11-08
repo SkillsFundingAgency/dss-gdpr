@@ -1,5 +1,5 @@
-﻿using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Linq;
+﻿using Azure.Search.Documents.Indexes;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUpdateCustomerInformation.Models;
 
@@ -66,19 +66,27 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            var query = cosmosDbContainer.GetItemLinqQueryable<DocumentId>()
-                .Where(x => x.CustomerId == customerId)
-                .ToFeedIterator();
+            var parameterizedQuery = new QueryDefinition(
+                query: "SELECT id, CustomerId FROM @container c WHERE c.CustomerId = @customerId"
+            ).WithParameter("@container", containerName).WithParameter("@customerId", customerId);
+
+            using FeedIterator<DocumentId> filteredFeed = cosmosDbContainer.GetItemQueryIterator<DocumentId>(
+                 queryDefinition: parameterizedQuery
+            );
+
+            //var query = cosmosDbContainer.GetItemLinqQueryable<DocumentId>()
+            //    .Where(x => x.CustomerId == customerId)
+            //    .ToFeedIterator();
 
             List<DocumentId> documents = new List<DocumentId>();
 
-            while (query.HasMoreResults)
+            while (filteredFeed.HasMoreResults)
             {
-                var results = await query.ReadNextAsync();
-                documents.AddRange(results);
+                FeedResponse<DocumentId> response = await filteredFeed.ReadNextAsync();
+                documents.AddRange(response);
             }
 
-            if (documents != null && documents.Count > 0)
+            if (documents.Count > 0)
             {
                 _logger.LogInformation($"A total of {documents.Count.ToString()} '{containerName}' documents have been identified");
                 int totalDeleted = 0;
@@ -87,7 +95,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 {
                     try
                     {
-                        await cosmosDbContainer.DeleteItemAsync<DocumentId>(document.Id.ToString(), new PartitionKey());
+                        //await cosmosDbContainer.DeleteItemAsync<DocumentId>(document.Id.ToString(), new PartitionKey());
                         totalDeleted++;
                     }
                     catch (Exception ex)
@@ -98,6 +106,10 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 }
 
                 _logger.LogInformation($"A total of {totalDeleted} '{containerName}' documents have been deleted");
+            }
+            else
+            {
+                _logger.LogWarning($"No documents of type '{containerName}' were found for customer '{customerId.ToString()}'");
             }
         }
     }

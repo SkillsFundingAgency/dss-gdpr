@@ -88,7 +88,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
 
                 foreach (var documentId in documentIds)
                 {
-                    using (ResponseMessage deleteRequestResponse = await cosmosDbContainer.DeleteItemStreamAsync(documentId, new PartitionKey("")))
+                    using (ResponseMessage deleteRequestResponse = await cosmosDbContainer.DeleteItemStreamAsync(documentId, PartitionKey.None))
                     {
                         if (!deleteRequestResponse.IsSuccessStatusCode)
                         {

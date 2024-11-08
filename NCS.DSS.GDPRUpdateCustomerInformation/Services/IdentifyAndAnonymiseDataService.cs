@@ -55,8 +55,6 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
             try
             {
                 await _sqlConnection.OpenAsync();
-                command.CommandType = CommandType.StoredProcedure;
-
                 SqlDataReader reader = command.ExecuteReader();
 
                 List<Guid> idList = new List<Guid>();
@@ -69,12 +67,11 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
                 }
 
                 _logger.LogInformation($"Finished executing the stored procedure: {_GDPRIdentifyCustomersStoredProcedureName}");
-
                 return idList;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError($"Failed to execute the stored procedure ({_GDPRIdentifyCustomersStoredProcedureName}). Error: {e}");
+                _logger.LogError($"Failed to execute the stored procedure ({_GDPRIdentifyCustomersStoredProcedureName}). Error: {ex.Message}");
                 throw;
             }
             finally
@@ -97,13 +94,12 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
             try
             {
                 await _sqlConnection.OpenAsync();
-                command.CommandType = CommandType.StoredProcedure;
-
                 await command.ExecuteNonQueryAsync();
+                _logger.LogInformation($"Finished executing the stored procedure: {_GDPRUpdateCustomersStoredProcedureName}");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError($"Failed to execute the stored procedure ({_GDPRUpdateCustomersStoredProcedureName}). Error: {e}");
+                _logger.LogError($"Failed to execute the stored procedure ({_GDPRUpdateCustomersStoredProcedureName}). Error: {ex.Message}");
                 throw;
             }
             finally

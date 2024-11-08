@@ -74,10 +74,10 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
 
             while (resultSet.HasMoreResults)
             {
-                FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
-                foreach (var item in response)
+                FeedResponse<dynamic> documentRetrievalRequest = await resultSet.ReadNextAsync();
+                foreach (var document in documentRetrievalRequest)
                 {
-                    documentIds.Add(Convert.ToString(item.id));
+                    documentIds.Add(Convert.ToString(document.id));
                 }
             }
 
@@ -86,13 +86,13 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
                 _logger.LogInformation($"Customer ({customerId.ToString()}) has a total of {documentIds.Count.ToString()} '{containerName}' documents");
                 int totalDeleted = 0;
 
-                foreach (var id in documentIds)
+                foreach (var documentId in documentIds)
                 {
-                    using (ResponseMessage response = await cosmosDbContainer.DeleteItemStreamAsync(id, new PartitionKey()))
+                    using (ResponseMessage deleteRequestResponse = await cosmosDbContainer.DeleteItemStreamAsync(documentId, new PartitionKey()))
                     {
-                        if (!response.IsSuccessStatusCode)
+                        if (!deleteRequestResponse.IsSuccessStatusCode)
                         {
-                            _logger.LogWarning($"Failed to delete document. Document ID: {id}");
+                            _logger.LogWarning($"Failed to delete document. Document ID: {documentId}");
                         }
                         else
                         {
@@ -101,7 +101,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
                     }
                 }
 
-                _logger.LogInformation($"{totalDeleted}/{documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
+                _logger.LogInformation($"{totalDeleted.ToString()} / {documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
             }
             else
             {

@@ -43,13 +43,11 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
 
                 //await _identifyAndAnonymiseDataService.AnonymiseData();
 
-                _logger.LogInformation("Successfully anonymised customer information from SQL DB");
+                _logger.LogInformation("Successfully anonymised data from SQL DB");
 
                 _logger.LogInformation("Attempting to delete related documents from Cosmos DB");
 
                 await _identifyAndAnonymiseDataService.DeleteCustomersFromCosmos(customerIds);
-
-                _logger.LogInformation("Successfully deleted related documents from Cosmos DB");
 
                 _logger.LogInformation($"{nameof(GDPRUpdateCustomerInformation)} has finished invocation successfully");
 

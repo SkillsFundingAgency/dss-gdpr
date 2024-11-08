@@ -54,7 +54,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 goalsTask, webchatsTask, digitalIdentityTask, diverityDetailsTask, learningProgressionsTask,
                 outcomesTask, sessionsTask, subscriptionsTask, transfersTask);
 
-            await DeleteDocumentFromContainer(customerId, CustomerCosmosDb, CustomerCosmosDb); // do we need to check if this exists first?
+            await DeleteDocumentFromContainer(customerId, CustomerCosmosDb, CustomerCosmosDb);
 
             _logger.LogInformation($"{nameof(DeleteRecordsForCustomer)} function has finished invocation");
         }
@@ -78,23 +78,18 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                 FeedResponse<dynamic> response = await resultSet.ReadNextAsync();
                 foreach (var item in response)
                 {
-                    _logger.LogInformation($"ITEM: {item}");
-                    _logger.LogInformation($"ITEM ID: {item.id}");
-                    _logger.LogInformation($"ITEM ID (str): {Convert.ToString(item.id)}");
                     documentIds.Add(Convert.ToString(item.id)); 
                 }
             }
 
             if (documentIds.Count > 0)
             {
-                _logger.LogInformation($"A total of {documentIds.Count.ToString()} '{containerName}' documents have been identified");
+                _logger.LogInformation($"Customer ({customerId.ToString()}) has a total of {documentIds.Count.ToString()} '{containerName}' documents");
                 int totalDeleted = 0;
 
                 foreach (var id in documentIds)
                 {
-                    _logger.LogInformation($"ITEM ID: {id} | ITEM Type: {containerName}");
-
-                    /*using (ResponseMessage response = await cosmosDbContainer.DeleteItemStreamAsync(id, new PartitionKey()))
+                    using (ResponseMessage response = await cosmosDbContainer.DeleteItemStreamAsync(id, new PartitionKey()))
                     {
                         if (!response.IsSuccessStatusCode)
                         {
@@ -104,10 +99,10 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
                         {
                             totalDeleted++;
                         }
-                    }*/
+                    }
                 }
 
-                //_logger.LogInformation($"{totalDeleted}/{documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
+                _logger.LogInformation($"{totalDeleted}/{documentIds.Count.ToString()} '{containerName}' documents have been deleted successfully");
             }
             else
             {

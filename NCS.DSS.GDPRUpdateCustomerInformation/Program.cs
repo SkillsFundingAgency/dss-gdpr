@@ -1,4 +1,3 @@
-using DFC.JSON.Standard;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +13,6 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddLogging();
-        services.AddSingleton<IJsonHelper, JsonHelper>();
         services.AddSingleton<ICosmosDBProvider, CosmosDBProvider>();
         services.AddSingleton<IAzureSqlDbProvider, AzureSqlDbProvider>();
         services.AddSingleton<IIdentifyAndAnonymiseDataService, IdentifyAndAnonymiseDataService>();

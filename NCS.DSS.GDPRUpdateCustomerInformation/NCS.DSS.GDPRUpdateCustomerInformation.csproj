@@ -10,8 +10,6 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.18.2" />
     <PackageReference Include="Azure.Search.Documents" Version="11.6.0" />
-    <PackageReference Include="DFC.HTTP.Standard" Version="0.1.11" />
-    <PackageReference Include="DFC.JSON.Standard" Version="0.1.4" />
     <PackageReference Include="DFC.Swagger.Standard" Version="0.1.29" />
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.45.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.66.1" />

@@ -1,6 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Models;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Cosmos.Provider
 {

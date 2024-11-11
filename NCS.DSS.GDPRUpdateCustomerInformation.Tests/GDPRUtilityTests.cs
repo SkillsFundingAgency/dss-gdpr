@@ -1,5 +1,5 @@
 using FakeItEasy;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.GDPRUtility.Services;
 
@@ -10,14 +10,12 @@ namespace NCS.DSS.GDPRUtility.Tests
         private readonly IIdentifyAndAnonymiseDataService _fakeDataService;
         private readonly ILogger<Function.GDPRUtility> _fakeLogger;
         private readonly Function.GDPRUtility _function;
-        private readonly HttpRequest _request;
 
         public GDPRUtilityTests()
         {
             _fakeDataService = A.Fake<IIdentifyAndAnonymiseDataService>();
             _fakeLogger = A.Fake<ILogger<Function.GDPRUtility>>();
             _function = new Function.GDPRUtility(_fakeDataService, _fakeLogger);
-            _request = new DefaultHttpContext().Request;
         }
 
         [Fact]
@@ -25,9 +23,10 @@ namespace NCS.DSS.GDPRUtility.Tests
         {
             // Arrange
             A.CallTo(() => _fakeDataService.ReturnCustomerIds()).Returns(Task.FromResult(new List<Guid>()));
+            var timerInfo = new TimerInfo();
 
             // Act
-            await _function.RunAsync(_request);
+            await _function.RunAsync(timerInfo);
 
             // Assert
             A.CallTo(() => _fakeDataService.AnonymiseData()).MustNotHaveHappened();
@@ -40,9 +39,10 @@ namespace NCS.DSS.GDPRUtility.Tests
             // Arrange
             var customerIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
             A.CallTo(() => _fakeDataService.ReturnCustomerIds()).Returns(Task.FromResult(customerIds));
+            var timerInfo = new TimerInfo();
 
             // Act
-            await _function.RunAsync(_request);
+            await _function.RunAsync(timerInfo);
 
             // Assert
             A.CallTo(() => _fakeDataService.AnonymiseData()).MustHaveHappenedOnceExactly();

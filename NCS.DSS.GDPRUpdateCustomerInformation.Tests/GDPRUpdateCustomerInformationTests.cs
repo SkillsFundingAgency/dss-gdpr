@@ -1,7 +1,7 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Service;
+using NCS.DSS.GDPRUpdateCustomerInformation.Services;
 
 namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
 {
@@ -27,7 +27,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
             A.CallTo(() => _fakeDataService.ReturnCustomerIds()).Returns(Task.FromResult(new List<Guid>()));
 
             // Act
-            await _function.Run(_request);
+            await _function.RunAsync(_request);
 
             // Assert
             A.CallTo(() => _fakeDataService.AnonymiseData()).MustNotHaveHappened();
@@ -42,7 +42,7 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
             A.CallTo(() => _fakeDataService.ReturnCustomerIds()).Returns(Task.FromResult(customerIds));
 
             // Act
-            await _function.Run(_request);
+            await _function.RunAsync(_request);
 
             // Assert
             A.CallTo(() => _fakeDataService.AnonymiseData()).MustHaveHappenedOnceExactly();

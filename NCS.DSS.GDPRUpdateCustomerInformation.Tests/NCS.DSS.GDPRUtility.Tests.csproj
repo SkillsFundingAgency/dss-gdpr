@@ -15,6 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FakeItEasy" Version="8.3.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.23.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -27,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NCS.DSS.GDPRUpdateCustomerInformation\NCS.DSS.GDPRUpdateCustomerInformation.csproj" />
+    <ProjectReference Include="..\NCS.DSS.GDPRUpdateCustomerInformation\NCS.DSS.GDPRUtility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

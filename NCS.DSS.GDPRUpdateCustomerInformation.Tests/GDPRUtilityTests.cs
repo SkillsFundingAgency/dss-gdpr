@@ -1,22 +1,22 @@
 using FakeItEasy;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Services;
+using NCS.DSS.GDPRUtility.Services;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Tests
+namespace NCS.DSS.GDPRUtility.Tests
 {
-    public class GDPRUpdateCustomerInformationTests
+    public class GDPRUtilityTests
     {
         private readonly IIdentifyAndAnonymiseDataService _fakeDataService;
-        private readonly ILogger<Function.GDPRUpdateCustomerInformation> _fakeLogger;
-        private readonly Function.GDPRUpdateCustomerInformation _function;
+        private readonly ILogger<Function.GDPRUtility> _fakeLogger;
+        private readonly Function.GDPRUtility _function;
         private readonly HttpRequest _request;
 
-        public GDPRUpdateCustomerInformationTests()
+        public GDPRUtilityTests()
         {
             _fakeDataService = A.Fake<IIdentifyAndAnonymiseDataService>();
-            _fakeLogger = A.Fake<ILogger<Function.GDPRUpdateCustomerInformation>>();
-            _function = new Function.GDPRUpdateCustomerInformation(_fakeDataService, _fakeLogger);
+            _fakeLogger = A.Fake<ILogger<Function.GDPRUtility>>();
+            _function = new Function.GDPRUtility(_fakeDataService, _fakeLogger);
             _request = new DefaultHttpContext().Request;
         }
 

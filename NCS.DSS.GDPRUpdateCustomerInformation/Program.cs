@@ -3,9 +3,9 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Services;
+using NCS.DSS.GDPRUtility.Services;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation
+namespace NCS.DSS.GDPRUtility
 {
     internal class Program
     {

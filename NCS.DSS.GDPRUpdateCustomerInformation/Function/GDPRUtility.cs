@@ -18,7 +18,7 @@ namespace NCS.DSS.GDPRUtility.Function
 
         /*
         In case of failed execution, FixedDelayRetry will retry up to three times after a 15 second delay interval.
-        GDPRUtility runs at 2am every month (on the 1st of the month) as defined in NCRONTAB syntax:
+        GDPRUtility runs at 2am every month (on the 1st of the month) as defined in NCRONTAB syntax https://crontab.cronhub.io/:
         {seconds} {minutes} {hours} {day of month} {month} {day-of-week}
         */
 

@@ -18,13 +18,13 @@ namespace NCS.DSS.GDPRUtility.Function
 
         /*
         In case of failed execution, FixedDelayRetry will retry up to three times after a 30 minute delay interval.
-        GDPRUtility runs at 2am every month (on the 1st of the month) as defined in NCRONTAB syntax https://crontab.cronhub.io/:
+        GDPRUtility runs at 2am on the 1st of the month, only in May and November, as defined in NCRONTAB syntax https://crontab.cronhub.io/:
         {seconds} {minutes} {hours} {day of month} {month} {day-of-week}
         */
 
         [Function(nameof(GDPRUtility))]
         [FixedDelayRetry(3, "00:30:00")] 
-        public async Task<IActionResult> RunAsync([TimerTrigger("0 0 2 1 * *")] TimerInfo timer)
+        public async Task<IActionResult> RunAsync([TimerTrigger("0 2 1 5,11 *")] TimerInfo timer)
         {
             _logger.LogInformation($"{nameof(GDPRUtility)} has been invoked");
             _logger.LogInformation("Attempting to retrieve list of customer IDs");

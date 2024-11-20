@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
+namespace NCS.DSS.GDPRUtility.Services
 {
     public class CosmosDBService : ICosmosDBService
     {

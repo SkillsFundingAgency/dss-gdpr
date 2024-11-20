@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System.Data;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Services
+namespace NCS.DSS.GDPRUtility.Services
 {
     public class IdentifyAndAnonymiseDataService : IIdentifyAndAnonymiseDataService
     {

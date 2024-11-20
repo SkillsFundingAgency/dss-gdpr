@@ -1,26 +1,32 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUpdateCustomerInformation.Services;
+using NCS.DSS.GDPRUtility.Services;
 
-namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
+namespace NCS.DSS.GDPRUtility.Function
 {
-    public class GDPRUpdateCustomerInformation
+    public class GDPRUtility
     {
         private readonly IIdentifyAndAnonymiseDataService _identifyAndAnonymiseDataService;
-        private readonly ILogger<GDPRUpdateCustomerInformation> _logger;
+        private readonly ILogger<GDPRUtility> _logger;
 
-        public GDPRUpdateCustomerInformation(IIdentifyAndAnonymiseDataService identifyAndAnonymiseDataService, ILogger<GDPRUpdateCustomerInformation> logger)
+        public GDPRUtility(IIdentifyAndAnonymiseDataService identifyAndAnonymiseDataService, ILogger<GDPRUtility> logger)
         {
             _identifyAndAnonymiseDataService = identifyAndAnonymiseDataService;
             _logger = logger;
         }
 
-        [Function(nameof(GDPRUpdateCustomerInformation))]
-        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)] HttpRequest req)
+        /*
+        In case of failed execution, FixedDelayRetry will retry up to three times after a 30 minute delay interval.
+        GDPRUtility runs at 2am on the 1st of the month, only in May and November, as defined in NCRONTAB syntax https://crontab.cronhub.io/:
+        {seconds} {minutes} {hours} {day of month} {month} {day-of-week}
+        */
+
+        [Function(nameof(GDPRUtility))]
+        [FixedDelayRetry(3, "00:30:00")] 
+        public async Task<IActionResult> RunAsync([TimerTrigger("0 2 1 5,11 *")] TimerInfo timer)
         {
-            _logger.LogInformation($"{nameof(GDPRUpdateCustomerInformation)} has been invoked");
+            _logger.LogInformation($"{nameof(GDPRUtility)} has been invoked");
             _logger.LogInformation("Attempting to retrieve list of customer IDs");
 
             try
@@ -45,13 +51,13 @@ namespace NCS.DSS.GDPRUpdateCustomerInformation.Function
 
                 await _identifyAndAnonymiseDataService.DeleteCustomersFromCosmos(customerIds);
 
-                _logger.LogInformation($"{nameof(GDPRUpdateCustomerInformation)} has finished invocation successfully");
+                _logger.LogInformation($"{nameof(GDPRUtility)} has finished invocation successfully");
 
                 return new OkResult();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(GDPRUpdateCustomerInformation)} has failed to invoke. Error: {ex.Message}");
+                _logger.LogError($"{nameof(GDPRUtility)} has failed to invoke. Error: {ex.Message}");
                 throw;
             }
         }

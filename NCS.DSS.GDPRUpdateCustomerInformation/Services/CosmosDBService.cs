@@ -103,7 +103,7 @@ namespace NCS.DSS.GDPRUtility.Services
             }
             else
             {
-                _logger.LogWarning("No documents in '{ContainerName}' were found for customer [{CustomerId}]", containerName, customerId.ToString());
+                _logger.LogInformation("No documents in '{ContainerName}' were found for customer [{CustomerId}]", containerName, customerId.ToString());
             }
         }
     }

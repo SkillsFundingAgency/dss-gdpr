@@ -60,7 +60,7 @@ namespace NCS.DSS.GDPRUtility.Services
 
         private async Task DeleteDocumentFromContainer(Guid customerId, string databaseName, string containerName)
         {
-            _logger.LogInformation("Attempting to retrieve documents associated with customer [{CustomerId}] from container '{ContainerName}' from database '{DatabaseName}'", customerId.ToString(), containerName, databaseName);
+            _logger.LogInformation("Attempting to retrieve documents associated with customer [{CustomerId}] from container '{ContainerName}' in database '{DatabaseName}'", customerId.ToString(), containerName, databaseName);
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
@@ -83,7 +83,7 @@ namespace NCS.DSS.GDPRUtility.Services
 
             if (documentIds.Count > 0)
             {
-                _logger.LogInformation("Customer [{CustomerId}] has {DocumentIdCount} document(s) from '{ContainerName}'", customerId.ToString(), documentIds.Count.ToString(), containerName);
+                _logger.LogInformation("Customer [{CustomerId}] has {DocumentIdCount} document(s) in '{ContainerName}'", customerId.ToString(), documentIds.Count.ToString(), containerName);
                 int totalDeleted = 0;
 
                 foreach (var documentId in documentIds)
@@ -91,7 +91,7 @@ namespace NCS.DSS.GDPRUtility.Services
                     using ResponseMessage deleteRequestResponse = await cosmosDbContainer.DeleteItemStreamAsync(documentId, PartitionKey.None);
                     if (!deleteRequestResponse.IsSuccessStatusCode)
                     {
-                        _logger.LogWarning("Failed to delete document [{DocumentId}] from '{ContainerName}'. Response code: {ResponseCode}. Error: {ErrorMessage}", documentId, containerName, deleteRequestResponse.StatusCode.ToString(), deleteRequestResponse.ErrorMessage);
+                        _logger.LogWarning("Failed to delete document [{DocumentId}] in '{ContainerName}'. Response code: {ResponseCode}. Error: {ErrorMessage}", documentId, containerName, deleteRequestResponse.StatusCode.ToString(), deleteRequestResponse.ErrorMessage);
                     }
                     else
                     {
@@ -99,7 +99,7 @@ namespace NCS.DSS.GDPRUtility.Services
                     }
                 }
 
-                _logger.LogInformation("{totalDeleted} / {DocumentIdsCount} documents have been deleted successfully from '{ContainerName}'", totalDeleted.ToString(), documentIds.Count.ToString(), containerName);
+                _logger.LogInformation("{totalDeleted} / {DocumentIdsCount} documents have been deleted successfully in '{ContainerName}'", totalDeleted.ToString(), documentIds.Count.ToString(), containerName);
             }
             else
             {

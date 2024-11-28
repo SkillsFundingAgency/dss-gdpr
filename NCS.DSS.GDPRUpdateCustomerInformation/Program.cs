@@ -18,6 +18,7 @@ namespace NCS.DSS.DataUtility
 
                 services.AddSingleton<ICosmosDBService, CosmosDBService>();
                 services.AddSingleton<IIdentifyAndAnonymiseDataService, IdentifyAndAnonymiseDataService>();
+                services.AddSingleton<IGenericDataService, GenericDataService>();
 
                 services.AddSingleton(s =>
                 {

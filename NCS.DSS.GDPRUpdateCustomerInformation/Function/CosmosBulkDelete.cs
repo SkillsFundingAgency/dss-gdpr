@@ -19,10 +19,11 @@ namespace NCS.DSS.DataUtility.Function
         }
 
         [Function(nameof(CosmosBulkDelete))]
-        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
         {
             _logger.LogInformation($"{nameof(CosmosBulkDelete)} has been invoked");
-            _logger.LogInformation("Attempting to retrieve the container-name, field-name, and field-values of the records to delete");
+            _logger.LogInformation($"Query recieved: {req.QueryString}");
+            _logger.LogInformation("Attempting to retrieve the db-name, container-name, field-name, and field-values of the records to delete");
 
             try
             {
@@ -31,6 +32,8 @@ namespace NCS.DSS.DataUtility.Function
                 string field = req.Query["field-name"];
                 List<string> values = (req.Query["field-values"].FirstOrDefault() ?? string.Empty).Split(',').ToList();
                 bool sql = bool.TryParse(req.Query["sql-delete"], out sql);
+
+                _logger.LogInformation($" Found paramaters db-name: '{database}', container-name: '{container}', field-name: '{field}', and field-values: '{values.ToString()}'");
 
                 await _genericDataService.DeleteFromCosmos(database, container, field, values, sql);
 

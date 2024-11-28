@@ -4,26 +4,21 @@ using System.Data;
 
 namespace NCS.DSS.DataUtility.Services
 {
-    public class IdentifyAndAnonymiseDataService : IIdentifyAndAnonymiseDataService
+    public class GenericDataService : IGenericDataService
     {
         private readonly string _GDPRUpdateCustomersStoredProcedureName = Environment.GetEnvironmentVariable("GDPRUpdateCustomersStoredProcedureName");
         private readonly string _GDPRIdentifyCustomersStoredProcedureName = Environment.GetEnvironmentVariable("GDPRIdentifyCustomersStoredProcedureName");
         private readonly string _sqlConnectionString = Environment.GetEnvironmentVariable("AzureSQLConnectionString");
 
-        private readonly ILogger<IIdentifyAndAnonymiseDataService> _logger;
+        private readonly ILogger<IGenericDataService> _logger;
         private readonly ICosmosDBService _cosmosDBService;
         private readonly SqlConnection _sqlConnection;
 
-        public IdentifyAndAnonymiseDataService(ICosmosDBService cosmosDBService, ILogger<IIdentifyAndAnonymiseDataService> logger)
+        public GenericDataService(ICosmosDBService cosmosDBService, ILogger<IGenericDataService> logger)
         {
             _cosmosDBService = cosmosDBService;
             _logger = logger;
             _sqlConnection = new SqlConnection(_sqlConnectionString);
-        }
-
-        public async Task AnonymiseData()
-        {
-            await ExecuteUpdateStoredProcedureAsync();
         }
 
         public async Task DeleteCustomersFromCosmos(List<Guid> CustomerIds)
@@ -37,9 +32,25 @@ namespace NCS.DSS.DataUtility.Services
             }
         }
 
-        public async Task<List<Guid>> ReturnCustomerIds()
+        public async Task DeleteFromCosmos(string database, string container, string field, List<string> values, bool sql)
         {
-            return await ExecuteIdentifyStoredProcedureAsync();
+            if (values != null)
+            {
+                foreach (string value in values)
+                {
+                    await _cosmosDBService.DeleteGenericRecordsFromContainer(database, container, field, value);
+
+                    if (sql)
+                    {
+                        throw new NotImplementedException();
+                    }
+                }
+            }
+        }
+
+        public Task<List<Guid>> ReturnRecordIds()
+        {
+            throw new NotImplementedException();
         }
 
         private async Task<List<Guid>> ExecuteIdentifyStoredProcedureAsync()

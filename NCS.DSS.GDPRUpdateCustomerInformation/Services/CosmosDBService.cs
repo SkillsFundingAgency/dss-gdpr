@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
-namespace NCS.DSS.GDPRUtility.Services
+namespace NCS.DSS.DataUtility.Services
 {
     public class CosmosDBService : ICosmosDBService
     {
@@ -108,5 +108,56 @@ namespace NCS.DSS.GDPRUtility.Services
                 _logger.LogWarning($"No documents of type '{containerName}' were found for customer '{customerId.ToString()}'");
             }
         }
+
+        public async Task DeleteGenericRecordsFromContainer(string databaseName, string containerName, string field, string value)
+        {
+            _logger.LogInformation($"Attempting to retrieve records/documents with value '{value}' for field '{field}' from container '{containerName}' from within database '{databaseName}'");
+
+            Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
+
+            QueryDefinition queryDefinition =
+                new QueryDefinition("SELECT * FROM c WHERE c.@field = @value").WithParameter("@field", field).WithParameter("@value", value);
+
+            FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(queryDefinition);
+
+            List<string> documentIds = new List<string>();
+
+            while (resultSet.HasMoreResults)
+            {
+                FeedResponse<dynamic> documentRetrievalRequest = await resultSet.ReadNextAsync();
+                foreach (var document in documentRetrievalRequest)
+                {
+                    documentIds.Add(Convert.ToString(document.id));
+                }
+            }
+
+            if (documentIds.Count > 0)
+            {
+                _logger.LogInformation($"Container '{containerName}' has a total of {documentIds.Count.ToString()} matching records/documents");
+                int totalDeleted = 0;
+
+                foreach (var documentId in documentIds)
+                {
+                    using (ResponseMessage deleteRequestResponse = await cosmosDbContainer.DeleteItemStreamAsync(documentId, PartitionKey.None))
+                    {
+                        if (!deleteRequestResponse.IsSuccessStatusCode)
+                        {
+                            _logger.LogWarning($"Failed to delete Document ({documentId}). Response code: {deleteRequestResponse.StatusCode.ToString()}. Error: {deleteRequestResponse.ErrorMessage}");
+                        }
+                        else
+                        {
+                            totalDeleted++;
+                        }
+                    }
+                }
+
+                _logger.LogInformation($"{totalDeleted.ToString()} / {documentIds.Count.ToString()} '{containerName}' records/documents have been deleted successfully");
+            }
+            else
+            {
+                _logger.LogWarning($"No records/documents with value '{value}' for field '{field}' were found");
+            }
+        }
+
     }
 }

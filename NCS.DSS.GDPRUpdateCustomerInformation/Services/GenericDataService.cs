@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using System.Data;
 
@@ -36,8 +37,11 @@ namespace NCS.DSS.DataUtility.Services
         {
             if (values != null)
             {
+                int next = 1;
                 foreach (string value in values)
                 {
+                    _logger.LogInformation($"Looking at value number {next} of {values?.Count}");
+
                     _logger.LogInformation($"About to initiate Cosmos delete on record(s) with '{field}' value: {value}");
                     await _cosmosDBService.DeleteGenericRecordsFromContainer(database, container, field, value);
 
@@ -46,6 +50,7 @@ namespace NCS.DSS.DataUtility.Services
                         _logger.LogInformation($"About to initiate SQL delete on record(s) with: '{field}' value: {value}");
                         throw new NotImplementedException();
                     }
+                    next++;
                 }
             }
         }

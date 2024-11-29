@@ -39,7 +39,7 @@ namespace NCS.DSS.DataUtility.Function
 
                 _logger.LogInformation($"Found parameters...\n" +
                     $"db-name:              {database}\n" +
-                    $"container-name:       {container}" +
+                    $"container-name:       {container}\n" +
                     $"field-name:           {field}\n" +
                     $"field-values (count): {values?.Count}\n" +
                     $"sql-delete:           {sql_bool}");

@@ -93,33 +93,5 @@ namespace NCS.DSS.DataUtility.Services
                 await _sqlConnection.CloseAsync();
             }
         }
-
-        private async Task ExecuteUpdateStoredProcedureAsync()
-        {
-            using var command = new SqlCommand(_GDPRUpdateCustomersStoredProcedureName, _sqlConnection)
-            {
-                CommandType = CommandType.StoredProcedure
-            };
-
-            _logger.LogInformation($"Attempting to execute the stored procedure: {_GDPRUpdateCustomersStoredProcedureName}");
-            _logger.LogInformation("Opening a database connection...");
-
-            try
-            {
-                await _sqlConnection.OpenAsync();
-                await command.ExecuteNonQueryAsync();
-                _logger.LogInformation($"Finished executing the stored procedure: {_GDPRUpdateCustomersStoredProcedureName}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed to execute the stored procedure ({_GDPRUpdateCustomersStoredProcedureName}). Error: {ex.Message}");
-                throw;
-            }
-            finally
-            {
-                _logger.LogInformation("Closing a database connection...");
-                await _sqlConnection.CloseAsync();
-            }
-        }
     }
 }

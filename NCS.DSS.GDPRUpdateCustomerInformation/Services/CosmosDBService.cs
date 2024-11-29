@@ -111,7 +111,7 @@ namespace NCS.DSS.DataUtility.Services
 
         public async Task DeleteGenericRecordsFromContainer(string databaseName, string containerName, string field, string value)
         {
-            _logger.LogInformation($"Attempting to retrieve records/documents with value '{value}' for field '{field}' from container '{containerName}' from within database '{databaseName}'");
+            _logger.LogInformation($"Attempting to retrieve Cosmos records/documents with value '{value}' for field '{field}' from container '{containerName}' from within database '{databaseName}'");
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 

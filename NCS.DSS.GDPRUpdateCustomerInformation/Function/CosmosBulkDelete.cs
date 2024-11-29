@@ -23,6 +23,7 @@ namespace NCS.DSS.DataUtility.Function
         {
             _logger.LogInformation($"{nameof(CosmosBulkDelete)} has been invoked");
             _logger.LogInformation("Attempting to retrieve the db-name, container-name, field-name, and field-values of the records to delete");
+            _logger.LogInformation("Attempting to retrieve the value of the sql-delete flag");
 
             try
             {
@@ -36,7 +37,12 @@ namespace NCS.DSS.DataUtility.Function
                 List<string> values = [.. data["field-values"].Split(',')];
                 bool sql = bool.TryParse(data["sql-delete"], out sql);
 
-                _logger.LogInformation($"Found paramaters db-name: '{database}', container-name: '{container}', field-name: '{field}', and field-values: '{values.ToString()}'");
+                _logger.LogInformation($"Found parameters...\n" +
+                    $"db-name:              {database}\n" +
+                    $"container-name:       {container}" +
+                    $"field-name:           {field}\n" +
+                    $"field-values (count): {values?.Count}\n" +
+                    $"sql-delete:           {sql}");
 
                 await _genericDataService.DeleteFromCosmos(database, container, field, values, sql);
 

@@ -34,15 +34,16 @@ namespace NCS.DSS.DataUtility.Services
 
         public async Task DeleteFromCosmos(string database, string container, string field, List<string> values, bool sql)
         {
-            _logger.LogInformation($"Found {values?.Count} values in the request");
             if (values != null)
             {
                 foreach (string value in values)
                 {
+                    _logger.LogInformation($"About to initiate Cosmos delete on record: {value}");
                     await _cosmosDBService.DeleteGenericRecordsFromContainer(database, container, field, value);
 
                     if (sql)
                     {
+                        _logger.LogInformation($"About to initiate SQL delete on record: {value}");
                         throw new NotImplementedException();
                     }
                 }

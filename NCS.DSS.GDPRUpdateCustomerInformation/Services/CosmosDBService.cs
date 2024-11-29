@@ -113,10 +113,23 @@ namespace NCS.DSS.DataUtility.Services
         {
             _logger.LogInformation($"Attempting to retrieve Cosmos records/documents with value '{value}' for field '{field}' from container '{containerName}' from within database '{databaseName}'");
 
+            if (int_bool)
+            {
+                if (int.TryParse(value, out int intValue))
+                {
+                    value = intValue.ToString();
+                }
+                else
+                {
+                    _logger.LogError($"Failed to convert value '{value}' to an integer.");
+                    return;
+                }
+            }
+
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
             string queryString = $"SELECT * FROM c WHERE c.{field} = @value";
-            QueryDefinition queryDefinition = new QueryDefinition(queryString).WithParameter(int_bool ? @value : "@value", value);
+            QueryDefinition queryDefinition = new QueryDefinition(queryString).WithParameter("@value", value);
 
             FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(queryDefinition);
 

@@ -38,12 +38,12 @@ namespace NCS.DSS.DataUtility.Services
             {
                 foreach (string value in values)
                 {
-                    _logger.LogInformation($"About to initiate Cosmos delete on record: {value}");
+                    _logger.LogInformation($"About to initiate Cosmos delete on record(s) with '{field}' value: {value}");
                     await _cosmosDBService.DeleteGenericRecordsFromContainer(database, container, field, value);
 
                     if (sql)
                     {
-                        _logger.LogInformation($"About to initiate SQL delete on record: {value}");
+                        _logger.LogInformation($"About to initiate SQL delete on record(s) with: '{field}' value: {value}");
                         throw new NotImplementedException();
                     }
                 }

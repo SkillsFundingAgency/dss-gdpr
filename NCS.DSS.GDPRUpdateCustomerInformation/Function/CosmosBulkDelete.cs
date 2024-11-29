@@ -27,7 +27,6 @@ namespace NCS.DSS.DataUtility.Function
 
             try
             {
-
                 string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
                 var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(requestBody);
 
@@ -35,16 +34,17 @@ namespace NCS.DSS.DataUtility.Function
                 string container = data["container-name"];
                 string field = data["field-name"];
                 List<string> values = [.. data["field-values"].Split(',')];
-                bool sql = bool.TryParse(data["sql-delete"], out sql);
+                bool sql_bool;
+                bool sql_text = bool.TryParse(data["sql-delete"], out sql_bool);
 
                 _logger.LogInformation($"Found parameters...\n" +
                     $"db-name:              {database}\n" +
                     $"container-name:       {container}" +
                     $"field-name:           {field}\n" +
                     $"field-values (count): {values?.Count}\n" +
-                    $"sql-delete:           {sql}");
+                    $"sql-delete:           {sql_bool}");
 
-                await _genericDataService.DeleteFromCosmos(database, container, field, values, sql);
+                await _genericDataService.DeleteFromCosmos(database, container, field, values, sql_bool);
 
                 _logger.LogInformation($"{nameof(CosmosBulkDelete)} has finished invocation successfully");
 

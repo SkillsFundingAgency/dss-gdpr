@@ -142,7 +142,7 @@ namespace NCS.DSS.DataUtility.Services
                     {
                         if (!deleteRequestResponse.IsSuccessStatusCode)
                         {
-                            _logger.LogWarning($"Failed to delete Document ({documentId}). Response code: {deleteRequestResponse.StatusCode.ToString()}. Error: {deleteRequestResponse.ErrorMessage}");
+                            _logger.LogWarning($"Failed to delete Cosmos record/document with documentId: '{documentId}'. Response code: {deleteRequestResponse.StatusCode.ToString()}. Error: {deleteRequestResponse.ErrorMessage}");
                         }
                         else
                         {
@@ -155,7 +155,7 @@ namespace NCS.DSS.DataUtility.Services
             }
             else
             {
-                _logger.LogWarning($"No records/documents with value '{value}' for field '{field}' were found");
+                _logger.LogWarning($"No Cosmos records/documents with value '{value}' for field '{field}' were found");
             }
         }
 

@@ -23,7 +23,8 @@ namespace NCS.DSS.DataUtility.Function
         {
             _logger.LogInformation($"{nameof(CosmosBulkDelete)} has been invoked");
             _logger.LogInformation("Attempting to retrieve the db-name, container-name, field-name, and field-values of the records to delete");
-            _logger.LogInformation("Attempting to retrieve the value of the sql-delete flag");
+            _logger.LogInformation("Attempting to retrieve the values of the optional sql-delete and int-values flags");
+            _logger.LogInformation("int-values must be true when providing field-values that are numeric");
 
             try
             {
@@ -34,17 +35,20 @@ namespace NCS.DSS.DataUtility.Function
                 string container = data["container-name"];
                 string field = data["field-name"];
                 List<string> values = [.. data["field-values"].Split(',')];
+                bool int_bool;
+                bool int_text = bool.TryParse(data["int-values"], out int_bool);
                 bool sql_bool;
                 bool sql_text = bool.TryParse(data["sql-delete"], out sql_bool);
 
                 _logger.LogInformation($"Found parameters...\n" +
-                    $"db-name:              {database}\n" +
-                    $"container-name:       {container}\n" +
-                    $"field-name:           {field}\n" +
-                    $"field-values (count): {values?.Count}\n" +
-                    $"sql-delete:           {sql_bool}");
+                    $"db-name:               {database}\n" +
+                    $"container-name:        {container}\n" +
+                    $"field-name:            {field}\n" +
+                    $"field-values  (count): {values?.Count}\n" +
+                    $"int-values (optional): {int_bool}\n" +
+                    $"sql-delete (optional): {sql_bool}");
 
-                await _genericDataService.DeleteFromCosmos(database, container, field, values, sql_bool);
+                await _genericDataService.DeleteFromCosmos(database, container, field, values, int_bool, sql_bool);
 
                 _logger.LogInformation($"{nameof(CosmosBulkDelete)} has finished invocation successfully");
 

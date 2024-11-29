@@ -115,8 +115,8 @@ namespace NCS.DSS.DataUtility.Services
 
             Container cosmosDbContainer = _cosmosDbClient.GetContainer(databaseName, containerName);
 
-            QueryDefinition queryDefinition =
-                new QueryDefinition("SELECT * FROM c WHERE c.@field = @value").WithParameter("@field", field).WithParameter("@value", value);
+            string queryString = $"SELECT * FROM c WHERE c.{field} = @value";
+            QueryDefinition queryDefinition = new QueryDefinition(queryString).WithParameter("@value", value);
 
             FeedIterator<dynamic> resultSet = cosmosDbContainer.GetItemQueryIterator<dynamic>(queryDefinition);
 

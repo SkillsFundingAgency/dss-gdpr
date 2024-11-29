@@ -34,6 +34,7 @@ namespace NCS.DSS.DataUtility.Services
 
         public async Task DeleteFromCosmos(string database, string container, string field, List<string> values, bool sql)
         {
+            _logger.LogInformation($"Found {values?.Count} values in the request");
             if (values != null)
             {
                 foreach (string value in values)

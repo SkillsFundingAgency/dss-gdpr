@@ -36,7 +36,7 @@ namespace NCS.DSS.DataUtility.Function
                 List<string> values = [.. data["field-values"].Split(',')];
                 bool sql = bool.TryParse(data["sql-delete"], out sql);
 
-                _logger.LogInformation($" Found paramaters db-name: '{database}', container-name: '{container}', field-name: '{field}', and field-values: '{values.ToString()}'");
+                _logger.LogInformation($"Found paramaters db-name: '{database}', container-name: '{container}', field-name: '{field}', and field-values: '{values.ToString()}'");
 
                 await _genericDataService.DeleteFromCosmos(database, container, field, values, sql);
 

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using NCS.DSS.DataUtility.Services;
+using Newtonsoft.Json;
 
 namespace NCS.DSS.DataUtility.Function
 {
@@ -21,16 +22,19 @@ namespace NCS.DSS.DataUtility.Function
         public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
         {
             _logger.LogInformation($"{nameof(CosmosBulkDelete)} has been invoked");
-            _logger.LogInformation($"Query recieved: {req.QueryString}");
             _logger.LogInformation("Attempting to retrieve the db-name, container-name, field-name, and field-values of the records to delete");
 
             try
             {
-                string database = req.Query["db-name"];
-                string container = req.Query["container-name"];
-                string field = req.Query["field-name"];
-                List<string> values = (req.Query["field-values"].FirstOrDefault() ?? string.Empty).Split(',').ToList();
-                bool sql = bool.TryParse(req.Query["sql-delete"], out sql);
+
+                string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+                var data = JsonConvert.DeserializeObject<Dictionary<string, string>>(requestBody);
+
+                string database = data["db-name"];
+                string container = data["container-name"];
+                string field = data["field-name"];
+                List<string> values = [.. data["field-values"].Split(',')];
+                bool sql = bool.TryParse(data["sql-delete"], out sql);
 
                 _logger.LogInformation($" Found paramaters db-name: '{database}', container-name: '{container}', field-name: '{field}', and field-values: '{values.ToString()}'");
 

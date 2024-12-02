@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUtility.Services;
+using NCS.DSS.DataUtility.Services;
 
-namespace NCS.DSS.GDPRUtility.Function
+namespace NCS.DSS.DataUtility.Function
 {
     public class GDPRUtility
     {

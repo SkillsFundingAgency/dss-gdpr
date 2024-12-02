@@ -1,9 +1,9 @@
 using FakeItEasy;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using NCS.DSS.GDPRUtility.Services;
+using NCS.DSS.DataUtility.Services;
 
-namespace NCS.DSS.GDPRUtility.Tests
+namespace NCS.DSS.DataUtility.Tests
 {
     public class GDPRUtilityTests
     {

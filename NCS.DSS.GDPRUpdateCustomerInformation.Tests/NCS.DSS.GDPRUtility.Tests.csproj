@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NCS.DSS.GDPRUpdateCustomerInformation\NCS.DSS.GDPRUtility.csproj" />
+    <ProjectReference Include="..\NCS.DSS.GDPRUpdateCustomerInformation\NCS.DSS.DataUtility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
